@@ -15,7 +15,6 @@ const LoginComponent: FC = () => {
 
             if (response.status === 201 && response.data.tokens.accessToken) {
                 login(response.data.tokens.accessToken);
-                console.log( useAuthStore.getState().accessToken)
                 navigate("/orders");
             }
         } catch (error) {

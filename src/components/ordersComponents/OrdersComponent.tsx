@@ -29,15 +29,12 @@ const OrdersComponent: FC = () => {
                     params.sort = sortConfig.column;
                     params.order = sortConfig.direction;
                 }
-
-                console.log(accessToken)
                 const response = await axios.get('http://localhost:3001/api/orders', {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                     },
                     params: params,
                 });
-                console.log(response.data.data)
                 setOrders(response.data.data);
                 setTotalPages(response.data.total_pages);
                 setLoading(false);
@@ -46,7 +43,6 @@ const OrdersComponent: FC = () => {
                 setLoading(false);
             }
         };
-
         fetchOrders();
     }, [searchParams, sortConfig, currentPage]);
 
@@ -99,7 +95,7 @@ const OrdersComponent: FC = () => {
                             <th
                                 key={col}
                                 onClick={() => handleSort(col)}
-                                className="cursor-pointer px-4 py-2 text-left text-[12px] bg-green-500"
+                                className="cursor-pointer px-4 py-2 text-left text-[12px] text-white bg-[#76b852]"
                             >
                                 {col} {sortConfig.column === col ? (sortConfig.direction === DescAscEnum.ASC ? '▲' : '▼') : ''}
                             </th>
@@ -109,7 +105,7 @@ const OrdersComponent: FC = () => {
                     <tbody>
                     {orders.map((order: Order, index: number) => (
                         <tr key={order.id}
-                            className={`hover:bg-gray-50 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}`}>
+                            className={`hover:bg-[#43a047] ${index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}`}>
                             {Object.keys(order).map((key) => {
                                 const typedKey = key as keyof Order;
                                 return (
