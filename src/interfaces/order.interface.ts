@@ -17,5 +17,7 @@ export interface Order {
     sum: number,
     alreadyPaid: number,
     created_at: Date
+    group: string,
+    manager: string
 
 }
