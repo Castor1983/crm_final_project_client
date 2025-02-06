@@ -4,10 +4,12 @@ import axios from "axios";
 import {useAuthStore} from "../../store/auth.ts";
 import {usePaginationStore} from "../../store/pagination.ts";
 import PaginationComponent from "../paginationComponents/PaginationCOmponent.tsx";
+import {useSearchParams} from "react-router-dom";
 
 const OrdersComponent: FC = () => {
     const { orders, setOrders } = useOrdersStore();
     const [loading, setLoading] = useState<boolean>(true);
+    const [searchParams, setSearchParams] = useSearchParams();
     const accessToken = useAuthStore((state) => state.accessToken);
 
 
@@ -18,6 +20,9 @@ const OrdersComponent: FC = () => {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                     },
+                    params:
+                        Object.fromEntries(searchParams.entries()),
+
                 });
                 setOrders(response.data.data);
                 usePaginationStore.getState().setTotalPages(response.data.total_pages);
@@ -30,7 +35,7 @@ const OrdersComponent: FC = () => {
         };
 
         fetchOrders();
-    }, [setOrders, setCurrentPage]);
+    }, [setOrders, searchParams]);
     const renderValue = (value: any) => {
         return value ? value : 'Нет данных';
     };
@@ -79,7 +84,7 @@ const OrdersComponent: FC = () => {
                 </tbody>
             </table>
         </div>
-    <PaginationComponent/> </>
+    <PaginationComponent setSearchParams = {setSearchParams}/> </>
     );
 };
 
