@@ -186,6 +186,15 @@ const OrdersComponent: FC = () => {
                                                 >
                                                     Submit
                                                 </button>
+                                                <div>
+                                                    <button
+                                                        onClick={() => handleSubmitComment(order.id)}
+                                                        className="bg-[#43a047] text-white px-4 py-2 mt-2 rounded-[5px]"
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                </div>
+
                                             </div>
                                         )}
                                     </td>
