@@ -14,7 +14,7 @@ import {CommentInterface} from "../../interfaces/comment.interface.ts";
 const OrdersComponent: FC = () => {
     const { orders, setOrders } = useOrdersStore();
     const [loading, setLoading] = useState<boolean>(true);
-    const [expandedOrderId, setExpandedOrderId] = useState(null);
+    const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
     const [comment, setComment] = useState('');
     const [comments, setComments] = useState<CommentInterface[]>([])
     const [searchParams, setSearchParams] = useSearchParams();
@@ -31,7 +31,6 @@ const OrdersComponent: FC = () => {
                     page: currentPage.toString(),
                 };
 
-
                 if (sortConfig.column) {
                     params.sort = sortConfig.column;
                     params.order = sortConfig.direction;
@@ -44,16 +43,18 @@ const OrdersComponent: FC = () => {
                 });
                 setOrders(response.data.data);
                 setTotalPages(response.data.total_pages);
-                setLoading(false);
+
             } catch (error) {
                 console.error('Ошибка при загрузке заявок:', error);
+
+            } finally {
                 setLoading(false);
             }
         };
         fetchOrders();
     }, [searchParams, sortConfig, currentPage, comment, comments]);
-    const handleExpandOrder = async (orderId) => {
-        setExpandedOrderId(orderId === expandedOrderId ? null : orderId); //TODO
+    const handleExpandOrder = async (orderId: number| null) => {
+        setExpandedOrderId(orderId === expandedOrderId ? null : orderId);
         const response = await axios.get(`http://localhost:3001/api/orders/${orderId}`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -95,7 +96,7 @@ const OrdersComponent: FC = () => {
             return newParams;
         });
     };
-    const handleSubmitComment = async (orderId) => {
+    const handleSubmitComment = async (orderId: number) => {
         try {
             await axios.post(`http://localhost:3001/api/orders/addComment/${orderId}`, {
                 body: comment,
@@ -167,10 +168,10 @@ const OrdersComponent: FC = () => {
                                                     ))}
                                                 </ul>
                                             ) : (
-                                                <p className="text-gray-500 text-sm">Нет комментариев</p>
+                                                <p className="text-gray-500 text-sm">No comments</p>
                                             )}
                                         </div>
-                                        {(!order.manager || order.manager === manager?.surname) && ( //TODO
+                                        {(!order.manager || order.manager === manager?.surname) && (
                                             <div>
                                                 <input
                                                     type="text"

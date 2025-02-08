@@ -2,7 +2,6 @@ import {CourseEnum} from "../enums/course.enum.ts";
 import {CourseFormatEnum} from "../enums/courseFormat.enum.ts";
 import {CourseTypeEnum} from "../enums/courseType.enum.ts";
 import {StatusEnum} from "../enums/status.enum.ts";
-import {CommentInterface} from "./comment.interface.ts";
 
 export interface Order {
     id: number;
@@ -22,6 +21,5 @@ export interface Order {
     created_at: Date
     group: string,
     manager: string,
-    comments: CommentInterface[]
 
 }
