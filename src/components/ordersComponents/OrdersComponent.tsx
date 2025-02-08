@@ -155,7 +155,6 @@ const OrdersComponent: FC = () => {
                                         <p><strong>Message:</strong> {order.msg || 'None'}</p>
                                         <p><strong>UTM:</strong> {order.utm || 'None'}</p>
                                         <div className="mt-4 p-2 border-t border-gray-300">
-                                            <h3 className="font-semibold mb-2">Комментарии</h3>
                                             {comments && comments.length > 0 ? (
                                                 <ul className="space-y-2">
                                                     {comments.map((comment, index) => (
