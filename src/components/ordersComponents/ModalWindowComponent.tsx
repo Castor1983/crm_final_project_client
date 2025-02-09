@@ -38,8 +38,8 @@ const {editOrder, setEditOrder} = useOrdersStore()
                     >
                         <option value={StatusEnum.INWORK}>In work</option>
                         <option value={StatusEnum.NEW}>New</option>
-                        <option value={StatusEnum.AGGRE}>Aggre</option>
-                        <option value={StatusEnum.DISAGGRE}>Disaggre</option>
+                        <option value={StatusEnum.AGREE}>Agree</option>
+                        <option value={StatusEnum.DISAGREE}>Disagree</option>
                         <option value={StatusEnum.DUBBING}>Dubbing</option>
                     </select>
                 </div>

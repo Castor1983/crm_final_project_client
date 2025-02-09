@@ -67,7 +67,7 @@ const OrdersComponent: FC = () => {
 
         setComments(response.data.comments)
     };
-    const renderValue = (value: string | number | Date ) => {
+    const renderValue = (value: string | number | Date | null) => {
         if (value instanceof Date) {
             return value.toLocaleDateString();
         }
@@ -193,7 +193,11 @@ const OrdersComponent: FC = () => {
                                                     className=" p-2 w-full rounded-[5px] bg-white"
                                                 />
                                                 <button
-                                                    onClick={() => handleSubmitComment(order.id)}
+                                                    onClick={() => {
+                                                        if (order.id) {
+                                                            handleSubmitComment(order.id)
+                                                        }
+                                                    }}
                                                     className="bg-[#43a047] text-white px-4 py-2 mt-2 rounded-[5px]"
                                                 >
                                                     Submit
