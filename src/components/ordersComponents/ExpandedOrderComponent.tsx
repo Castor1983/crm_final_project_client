@@ -1,4 +1,4 @@
-import {FC, useState} from "react";
+import {FC} from "react";
 import {useAuthStore} from "../../store/auth.ts";
 import axios from "axios";
 import {useCommentsStore} from "../../store/comments.ts";
@@ -10,10 +10,9 @@ type Props = {
     order: Order
 }
 const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
-    const {manager} = useAuthStore()
-    const [comment, setComment] = useState('');
-    const comments = useCommentsStore.getState().comments
-    const accessToken = useAuthStore.getState().accessToken
+    const {manager, accessToken} = useAuthStore()
+
+    const {comments, comment, setComment} = useCommentsStore()
     const {setEditOrder}=useOrdersStore()
 
     const handleSubmitComment = async (orderId: number) => {

@@ -103,8 +103,6 @@ const OrdersComponent: FC = () => {
         });
     };
 
-
-
     if (loading) {
         return <div>loading...</div>;
     }
@@ -118,7 +116,7 @@ const OrdersComponent: FC = () => {
                         {[
                             "id", "name", "surname", "email", "phone", "age", "course",
                             "course_format", "course_type", "status", "sum", "alreadyPaid",
-                            "msg", "utm", "group", "manager", "created_at"
+                            "msg", "utm", "group", "manager", "created_at"  // TODO
                         ].map((col) => (
                             <th
                                 key={col}
