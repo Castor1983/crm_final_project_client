@@ -7,6 +7,7 @@ import Modal from "react-modal";
 import {useOrdersStore} from "../../store/orders.ts";
 import {useGroupsStore} from "../../store/groups.ts";
 import axios from "axios";
+import {useAuthStore} from "../../store/auth.ts";
 
 type Props = {
     isModalOpen: boolean
@@ -15,11 +16,14 @@ type Props = {
 const ModalWindowComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
 const {editOrder, setEditOrder} = useOrdersStore()
     const {groups, setGroups, newGroup, setNewGroup}=useGroupsStore()
-
+    const accessToken = useAuthStore.getState().accessToken
     useEffect(() => {
         const fetchGroups = async () => {
             try {
-                const response = await axios.get("http://localhost:3001/api/groups");
+                const response = await axios.get("http://localhost:3001/api/orders/groups", {//TODO
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    }});
                 setGroups(response.data);
             } catch (error) {
                 console.error("Помилка при отриманні груп:", error);
@@ -37,7 +41,7 @@ const {editOrder, setEditOrder} = useOrdersStore()
             return;
         }
         try {
-            const response = await axios.post("http://localhost:3001/api/groups", { name: newGroup });
+            const response = await axios.post("http://localhost:3001/api/orders/groups", { name: newGroup });
             setGroups([...groups, response.data.name]);
             setEditOrder(editOrder ? { ...editOrder, group: response.data.name } : null);
             setNewGroup("");
