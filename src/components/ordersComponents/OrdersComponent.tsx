@@ -1,6 +1,9 @@
+import React from "react";
+import Modal from "react-modal";
 import {FC, useEffect, useState} from "react";
-import {useOrdersStore} from "../../store/orders.ts";
 import axios from "axios";
+
+import {useOrdersStore} from "../../store/orders.ts";
 import {useAuthStore} from "../../store/auth.ts";
 import {usePaginationStore} from "../../store/pagination.ts";
 import PaginationComponent from "../paginationComponents/PaginationCOmponent.tsx";
@@ -8,8 +11,11 @@ import {useSearchParams} from "react-router-dom";
 import {useSortConfigStore} from "../../store/sortConfig.ts";
 import {DescAscEnum} from "../../enums/desc-asc.enum.ts";
 import {Order} from "../../interfaces/order.interface.ts";
-import React from "react";
 import {CommentInterface} from "../../interfaces/comment.interface.ts";
+import {StatusEnum} from "../../enums/status.enum.ts";
+import {CourseEnum} from "../../enums/course.enum.ts";
+import {CourseFormatEnum} from "../../enums/courseFormat.enum.ts";
+import {CourseTypeEnum} from "../../enums/courseType.enum.ts";
 
 const OrdersComponent: FC = () => {
     const { orders, setOrders } = useOrdersStore();
@@ -22,6 +28,8 @@ const OrdersComponent: FC = () => {
     const accessToken = useAuthStore.getState().accessToken
     const {manager} = useAuthStore()
     const { currentPage, setCurrentPage, setTotalPages } = usePaginationStore();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editOrder, setEditOrder] = useState<Order | null>(null);
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -108,6 +116,16 @@ const OrdersComponent: FC = () => {
             console.error('Ошибка при отправке комментария:', error);
         }
     };
+    const handleOpenModal = (order: Order) => {
+        setEditOrder(order);
+        setIsModalOpen(true);
+    };
+
+
+    const handleCloseModal = () => {
+        setEditOrder(null);
+        setIsModalOpen(false);
+    };
 
     if (loading) {
         return <div>Загрузка...</div>;
@@ -188,7 +206,7 @@ const OrdersComponent: FC = () => {
                                                 </button>
                                                 <div>
                                                     <button
-                                                        onClick={() => handleSubmitComment(order.id)}
+                                                        onClick={() => handleOpenModal(order)}
                                                         className="bg-[#43a047] text-white px-4 py-2 mt-2 rounded-[5px]"
                                                     >
                                                         Edit
@@ -211,6 +229,113 @@ const OrdersComponent: FC = () => {
                 totalPages={usePaginationStore.getState().totalPages}
                 onPageChange={handlePageChange}
             />
+            {isModalOpen && editOrder && (
+                <Modal isOpen={isModalOpen} onRequestClose={handleCloseModal} className="modal-content">
+                    <div className="flex flex-col gap-2">
+                        <label>Name:</label>
+                        <input
+                            type="text"
+                            value={editOrder.name}
+                            onChange={(e) => setEditOrder({ ...editOrder, name: e.target.value })}
+                            className="border p-2 rounded"
+                        />
+                        <label>Surname:</label>
+                        <input
+                            type="text"
+                            value={editOrder.surname}
+                            onChange={(e) => setEditOrder({ ...editOrder, surname: e.target.value })}
+                            className="border p-2 rounded"
+                        />
+                        <label>Email:</label>
+                        <input
+                            type="email"
+                            value={editOrder.email}
+                            onChange={(e) => setEditOrder({ ...editOrder, email: e.target.value })}
+                            className="border p-2 rounded"
+                        />
+                        <label>Phone:</label>
+                        <input
+                            type="text"
+                            value={editOrder.phone}
+                            onChange={(e) => setEditOrder({ ...editOrder, phone: e.target.value })}
+                            className="border p-2 rounded"
+                        />
+                        <label>Age:</label>
+                        <input
+                            type="number"
+                            value={editOrder.age}
+                            onChange={(e) => setEditOrder({ ...editOrder, age: Number(e.target.value)  })}
+                            className="border p-2 rounded"
+                        />
+                        <label>Sum:</label>
+                        <input
+                            type="number"
+                            value={editOrder.sum}
+                            onChange={(e) => setEditOrder({ ...editOrder, sum: Number(e.target.value)  })}
+                            className="border p-2 rounded"
+                        />
+                        <label>Already paid:</label>
+                        <input
+                            type="number"
+                            value={editOrder.alreadyPaid}
+                            onChange={(e) => setEditOrder({ ...editOrder, alreadyPaid: Number(e.target.value)  })}
+                            className="border p-2 rounded"
+                        />
+                        <label>Status:</label>
+                        <select
+                            value={editOrder.status}
+                            onChange={(e) => setEditOrder({ ...editOrder, status: e.target.value as StatusEnum  })}
+                            className="border p-2 rounded"
+                        >
+                            <option value={StatusEnum.INWORK}>In work</option>
+                            <option value={StatusEnum.NEW}>New</option>
+                            <option value={StatusEnum.AGGRE}>Aggre</option>
+                            <option value={StatusEnum.DISAGGRE}>Disaggre</option>
+                            <option value={StatusEnum.DUBBING}>Dubbing</option>
+                        </select>
+                    <label>Course:</label>
+                        <select
+                            value={editOrder.course}
+                            onChange={(e) => setEditOrder({ ...editOrder, course: e.target.value as CourseEnum  })}
+                            className="border p-2 rounded"
+                        >
+                            <option value={CourseEnum.FE}>FE</option>
+                            <option value={CourseEnum.JCX}>JCX</option>
+                            <option value={CourseEnum.FS}>FS</option>
+                            <option value={CourseEnum.PCX}>PCX</option>
+                            <option value={CourseEnum.JSCX}>JSCX</option>
+                            <option value={CourseEnum.QACX}>QACX</option>
+                        </select>
+                        <label>Course format:</label>
+                        <select
+                            value={editOrder.course_format}
+                            onChange={(e) => setEditOrder({ ...editOrder, course_format: e.target.value as CourseFormatEnum  })}
+                            className="border p-2 rounded"
+                        >
+                            <option value={CourseFormatEnum.ONLINE}>online</option>
+                            <option value={CourseFormatEnum.STATIC}>static</option>
+                        </select>
+                        <label>Course type:</label>
+                        <select
+                            value={editOrder.course_type}
+                            onChange={(e) => setEditOrder({ ...editOrder, course_type: e.target.value as CourseTypeEnum  })}
+                            className="border p-2 rounded"
+                        >
+                            <option value={CourseTypeEnum.PRO}>pro</option>
+                            <option value={CourseTypeEnum.INCUBATOR}>incubator</option>
+                            <option value={CourseTypeEnum.VIP}>vip</option>
+                            <option value={CourseTypeEnum.PREMIUM}>premium</option>
+                            <option value={CourseTypeEnum.MINIMAL}>minimal</option>
+                        </select>
+                    </div>
+                    <div className="flex justify-end gap-2 mt-4">
+                        <button onClick={handleCloseModal} className="bg-gray-500 text-white px-4 py-2 rounded">
+                            Close
+                        </button>
+                        <button className="bg-green-500 text-white px-4 py-2 rounded">Save</button>
+                    </div>
+                </Modal>
+            )}
         </div>
     );
 
