@@ -1,10 +1,12 @@
-import {FC} from "react";
+import {FC, useEffect} from "react";
 import {StatusEnum} from "../../enums/status.enum.ts";
 import {CourseEnum} from "../../enums/course.enum.ts";
 import {CourseFormatEnum} from "../../enums/courseFormat.enum.ts";
 import {CourseTypeEnum} from "../../enums/courseType.enum.ts";
 import Modal from "react-modal";
 import {useOrdersStore} from "../../store/orders.ts";
+import {useGroupsStore} from "../../store/groups.ts";
+import axios from "axios";
 
 type Props = {
     isModalOpen: boolean
@@ -12,6 +14,38 @@ type Props = {
 }
 const ModalWindowComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
 const {editOrder, setEditOrder} = useOrdersStore()
+    const {groups, setGroups, newGroup, setNewGroup}=useGroupsStore()
+
+    useEffect(() => {
+        const fetchGroups = async () => {
+            try {
+                const response = await axios.get("http://localhost:3001/api/groups");
+                setGroups(response.data);
+            } catch (error) {
+                console.error("Помилка при отриманні груп:", error);
+            }
+        };
+        if (isModalOpen) {
+            fetchGroups();
+        }
+    }, [isModalOpen]);
+
+    const handleAddGroup = async () => {
+        if (!newGroup.trim()) return;
+        if (groups.includes(newGroup)) {
+            alert("Група з такою назвою вже існує!");
+            return;
+        }
+        try {
+            const response = await axios.post("http://localhost:3001/api/groups", { name: newGroup });
+            setGroups([...groups, response.data.name]);
+            setEditOrder(editOrder ? { ...editOrder, group: response.data.name } : null);
+            setNewGroup("");
+        } catch (error) {
+            console.error("Помилка при додаванні групи:", error);
+        }
+    };
+
     const handleCloseModal = () => {
         setEditOrder(null);
         setIsModalOpen(false);
