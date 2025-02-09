@@ -1,4 +1,4 @@
-import React, {FC} from "react";
+import {FC} from "react";
 import {StatusEnum} from "../../enums/status.enum.ts";
 import {CourseEnum} from "../../enums/course.enum.ts";
 import {CourseFormatEnum} from "../../enums/courseFormat.enum.ts";
@@ -23,8 +23,8 @@ const {editOrder, setEditOrder} = useOrdersStore()
                     <label>Group:</label>
                     <input
                         type="text"
-                        value={editOrder.group}
-                        onChange={(e) => setEditOrder({...editOrder, group: e.target.value})}
+                        value={editOrder?.group || ""}
+                        onChange={(e) => setEditOrder(editOrder ? {...editOrder, group: e.target.value} : null)}
                         className="bg-gray-200 p-2 rounded"
                     />
                 </div>
@@ -32,8 +32,8 @@ const {editOrder, setEditOrder} = useOrdersStore()
                 <div className="flex flex-col">
                     <label>Status:</label>
                     <select
-                        value={editOrder.status}
-                        onChange={(e) => setEditOrder({...editOrder, status: e.target.value as StatusEnum})}
+                        value={editOrder?.status || ""}
+                        onChange={(e) => setEditOrder(editOrder ?{...editOrder, status: e.target.value as StatusEnum} : null)}
                         className="bg-gray-200 p-2 rounded"
                     >
                         <option value={StatusEnum.INWORK}>In work</option>
@@ -48,8 +48,8 @@ const {editOrder, setEditOrder} = useOrdersStore()
                     <label>Name:</label>
                     <input
                         type="text"
-                        value={editOrder.name}
-                        onChange={(e) => setEditOrder({...editOrder, name: e.target.value})}
+                        value={editOrder?.name || ""}
+                        onChange={(e) => setEditOrder(editOrder ?{...editOrder, name: e.target.value} : null)}
                         className="bg-gray-200 p-2 rounded"
                     />
                 </div>
@@ -58,8 +58,8 @@ const {editOrder, setEditOrder} = useOrdersStore()
                     <label>Sum:</label>
                     <input
                         type="number"
-                        value={editOrder.sum}
-                        onChange={(e) => setEditOrder({...editOrder, sum: Number(e.target.value)})}
+                        value={editOrder?.sum || ""}
+                        onChange={(e) => setEditOrder(editOrder ?{...editOrder, sum: Number(e.target.value)} : null)}
                         className="bg-gray-200 p-2 rounded"
                     />
                 </div>
@@ -68,8 +68,8 @@ const {editOrder, setEditOrder} = useOrdersStore()
                     <label>Surname:</label>
                     <input
                         type="text"
-                        value={editOrder.surname}
-                        onChange={(e) => setEditOrder({...editOrder, surname: e.target.value})}
+                        value={editOrder?.surname || ""}
+                        onChange={(e) => setEditOrder(editOrder ?{...editOrder, surname: e.target.value} : null)}
                         className="bg-gray-200 p-2 rounded"
                     />
                 </div>
@@ -78,8 +78,8 @@ const {editOrder, setEditOrder} = useOrdersStore()
                     <label>Already paid:</label>
                     <input
                         type="number"
-                        value={editOrder.alreadyPaid}
-                        onChange={(e) => setEditOrder({...editOrder, alreadyPaid: Number(e.target.value)})}
+                        value={editOrder?.alreadyPaid || ""}
+                        onChange={(e) => setEditOrder(editOrder ?{...editOrder, alreadyPaid: Number(e.target.value)} : null)}
                         className="bg-gray-200 p-2 rounded"
                     />
                 </div>
@@ -88,8 +88,8 @@ const {editOrder, setEditOrder} = useOrdersStore()
                     <label>Email:</label>
                     <input
                         type="email"
-                        value={editOrder.email}
-                        onChange={(e) => setEditOrder({...editOrder, email: e.target.value})}
+                        value={editOrder?.email || ""}
+                        onChange={(e) => setEditOrder(editOrder ?{...editOrder, email: e.target.value} : null)}
                         className="bg-gray-200 p-2 rounded"
                     />
                 </div>
@@ -97,8 +97,8 @@ const {editOrder, setEditOrder} = useOrdersStore()
                 <div className="flex flex-col">
                     <label>Course:</label>
                     <select
-                        value={editOrder.course}
-                        onChange={(e) => setEditOrder({...editOrder, course: e.target.value as CourseEnum})}
+                        value={editOrder?.course || ""}
+                        onChange={(e) => setEditOrder(editOrder ?{...editOrder, course: e.target.value as CourseEnum} : null)}
                         className="bg-gray-200 p-2 rounded"
                     >
                         <option value={CourseEnum.FE}>FE</option>
@@ -114,8 +114,8 @@ const {editOrder, setEditOrder} = useOrdersStore()
                     <label>Phone:</label>
                     <input
                         type="text"
-                        value={editOrder.phone}
-                        onChange={(e) => setEditOrder({...editOrder, phone: e.target.value})}
+                        value={editOrder?.phone || ""}
+                        onChange={(e) => setEditOrder(editOrder ?{...editOrder, phone: e.target.value} : null)}
                         className="bg-gray-200 p-2 rounded"
                     />
                 </div>
@@ -123,11 +123,11 @@ const {editOrder, setEditOrder} = useOrdersStore()
                 <div className="flex flex-col">
                     <label>Course format:</label>
                     <select
-                        value={editOrder.course_format}
-                        onChange={(e) => setEditOrder({
+                        value={editOrder?.course_format || ""}
+                        onChange={(e) => setEditOrder(editOrder ?{
                             ...editOrder,
                             course_format: e.target.value as CourseFormatEnum
-                        })}
+                        } : null)}
                         className="bg-gray-200 p-2 rounded"
                     >
                         <option value={CourseFormatEnum.ONLINE}>online</option>
@@ -139,8 +139,8 @@ const {editOrder, setEditOrder} = useOrdersStore()
                     <label>Age:</label>
                     <input
                         type="number"
-                        value={editOrder.age}
-                        onChange={(e) => setEditOrder({...editOrder, age: Number(e.target.value)})}
+                        value={editOrder?.age || ""}
+                        onChange={(e) => setEditOrder(editOrder ?{...editOrder, age: Number(e.target.value)} : null)}
                         className="bg-gray-200 p-2 rounded"
                     />
                 </div>
@@ -149,8 +149,8 @@ const {editOrder, setEditOrder} = useOrdersStore()
                 <div className="flex flex-col">
                     <label>Course type:</label>
                     <select
-                        value={editOrder.course_type}
-                        onChange={(e) => setEditOrder({...editOrder, course_type: e.target.value as CourseTypeEnum})}
+                        value={editOrder?.course_type || ""}
+                        onChange={(e) => setEditOrder(editOrder ?{...editOrder, course_type: e.target.value as CourseTypeEnum} : null)}
                         className="bg-gray-200 p-2 rounded"
                     >
                         <option value={CourseTypeEnum.PRO}>pro</option>
