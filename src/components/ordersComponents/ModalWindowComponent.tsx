@@ -8,7 +8,6 @@ import {useOrdersStore} from "../../store/orders.ts";
 import {useGroupsStore} from "../../store/groups.ts";
 import axios from "axios";
 import {useAuthStore} from "../../store/auth.ts";
-import {Order} from "../../interfaces/order.interface.ts";
 
 type Props = {
     isModalOpen: boolean
@@ -50,7 +49,7 @@ const {editOrder, setEditOrder} = useOrdersStore()
                 }
             );
             setGroups([...groups, response.data]);
-            setEditOrder(editOrder ? { ...editOrder, group: response.data.name } : null);
+            setEditOrder(editOrder && { ...editOrder, group: response.data.name });
             setNewGroup("");
         } catch (error) {
             console.error("Помилка при додаванні групи:", error);
@@ -61,15 +60,25 @@ const {editOrder, setEditOrder} = useOrdersStore()
         setEditOrder(null);
         setIsModalOpen(false);
     };
-    const handleUpdateOrder = async (editOrder: Order) => {
-       await axios.patch(
-            `http://localhost:3001/api/orders/edit${editOrder.id}`, //TODO
-            { editOrder },
-            {
-                headers: { Authorization: `Bearer ${accessToken}` }
-            }
-        );
-    }
+    const handleUpdateOrder = async () => {
+        if (!editOrder) return;
+
+        try {
+            await axios.patch(
+                `http://localhost:3001/api/orders/edit/${editOrder.id}`,
+                editOrder,
+                {
+                    headers: { Authorization: `Bearer ${accessToken}` }
+                }
+            );
+            alert("Замовлення оновлено успішно!"); //TODO
+            setIsModalOpen(false);
+        } catch (error) {
+            console.error("Помилка при оновленні замовлення:", error);
+            alert("Не вдалося оновити замовлення!");
+        }
+    };
+
     return(
         <Modal isOpen={isModalOpen} onRequestClose={handleCloseModal} className="modal-content">
             <div className="grid grid-cols-2 gap-4">
@@ -263,7 +272,7 @@ const {editOrder, setEditOrder} = useOrdersStore()
                 <button onClick={handleCloseModal} className="bg-[#43a047] text-white px-4 py-2 rounded">
                     CLOSE
                 </button>
-                <button onClick={handleUpdateOrder(editOrder)} className="bg-[#43a047] text-white px-4 py-2 rounded">SUBMIT</button>
+                <button onClick={handleUpdateOrder} className="bg-[#43a047] text-white px-4 py-2 rounded">SUBMIT</button>
             </div>
         </Modal>
     )
