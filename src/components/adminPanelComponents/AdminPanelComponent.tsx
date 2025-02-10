@@ -37,7 +37,7 @@ const AdminPanelComponent: FC =() => {
     if (error) return <p>{error}</p>;
 
     return (
-        <div>
+        <div className={"bg-white"}>
             <h1>Orders Statistic</h1>
             <p>
                 total: {stats.total} | In work: {stats.in_work} | null: {stats.null_count} |
