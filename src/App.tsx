@@ -2,8 +2,10 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import { useAuthStore } from "./store/auth";
 import LoginPage from "./pages/auth/LoginPage.tsx";
 import OrdersPage from "./pages/orders/OrdersPage.tsx";
+import AdminPanelPage from "./pages/adminPanel/AdminPanelPage.tsx";
+import {ReactNode} from "react";
 
-const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+const ProtectedRoute = ({ children }: { children: ReactNode }) => {
     const token = useAuthStore((state) => state.accessToken);
     return token ? children : <Navigate to="/" />;
 };
@@ -14,6 +16,7 @@ const App = () => {
             <Routes>
                 <Route path="/" element={<LoginPage />} />
                 <Route path="/orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>} />
+                <Route path="/adminPanel" element={<ProtectedRoute><AdminPanelPage /></ProtectedRoute>} />
             </Routes>
         </Router>
     );
