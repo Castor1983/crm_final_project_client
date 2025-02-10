@@ -124,7 +124,7 @@ const orderId = editOrder.id?.toString()
                     )}
                 </div>
 
-                <div className="flex flex-col">
+                <div className="flex flex-col"> //TODO validation
                     <label>Status:</label>
                     <select
                         value={editOrder?.status || ""}

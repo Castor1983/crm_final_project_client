@@ -81,7 +81,7 @@ const OrdersTableComponent: FC<Props> =({setIsModalOpen}) => {
                     <React.Fragment key={order.id}>
                         <tr
                             onClick={() => handleExpandOrder(order.id)}
-                            className={`hover:bg-[#43a047] cursor-pointer ${index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}`}
+                                className={`hover:bg-[#43a047] cursor-pointer ${index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}`}
                         >
                             {Object.keys(order).map((key) => {
                                 const typedKey = key as keyof Order;
