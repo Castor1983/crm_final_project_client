@@ -42,7 +42,7 @@ const {editOrder, setEditOrder} = useOrdersStore()
         }
         try {
             const response = await axios.post(
-                "http://localhost:3001/api/orders/groups",
+                "http://localhost:3001/api/orders/groups", //TODO
                 { name: newGroup },
                 {
                     headers: { Authorization: `Bearer ${accessToken}` }
