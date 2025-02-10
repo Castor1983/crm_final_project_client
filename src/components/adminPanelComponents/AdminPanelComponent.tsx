@@ -2,12 +2,13 @@ import {FC, useEffect, useState} from "react";
 import axios from "axios";
 import {useAuthStore} from "../../store/auth.ts";
 import {useManagersStore} from "../../store/managers.ts";
+import ManagerComponent from "./ManagerComponent.tsx";
 
 const AdminPanelComponent: FC =() => {
     const {accessToken} = useAuthStore()
     const { stats, setStats, managers, setManagers} = useManagersStore()
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -43,19 +44,10 @@ const AdminPanelComponent: FC =() => {
                 Agree: {stats.agree} | Disagree: {stats.disagree} |
                 Dubbing: {stats.dubbing} | New: {stats.new}
             </p>
-
-            <h2>Managers</h2>
             {managers.length > 0 ? (
                 managers.map((manager) => (
-                    <div key={manager.id} className="border p-4 my-2">
-                        <p>id: {manager.id}</p>
-                        <p>email: {manager.email}</p>
-                        <p>name: {manager.name}</p>
-                        <p>surname: {manager.surname}</p>
-                        <p>is_active: {manager.is_active ? "true" : "false"}</p>
-                        <p>last_login: {manager.last_login || "null"}</p>
-                        <p>total: {manager.orderStats.total || "null"}</p>
-                    </div>
+                    <ManagerComponent key={manager.id} manager={manager} />
+
                 ))
             ) : (
                 <p>No managers found</p>
