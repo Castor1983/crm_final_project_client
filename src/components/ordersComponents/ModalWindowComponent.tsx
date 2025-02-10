@@ -8,6 +8,7 @@ import {useOrdersStore} from "../../store/orders.ts";
 import {useGroupsStore} from "../../store/groups.ts";
 import axios from "axios";
 import {useAuthStore} from "../../store/auth.ts";
+import {Order} from "../../interfaces/order.interface.ts";
 
 type Props = {
     isModalOpen: boolean
@@ -60,6 +61,15 @@ const {editOrder, setEditOrder} = useOrdersStore()
         setEditOrder(null);
         setIsModalOpen(false);
     };
+    const handleUpdateOrder = async (editOrder: Order) => {
+       await axios.patch(
+            `http://localhost:3001/api/orders/edit${editOrder.id}`, //TODO
+            { editOrder },
+            {
+                headers: { Authorization: `Bearer ${accessToken}` }
+            }
+        );
+    }
     return(
         <Modal isOpen={isModalOpen} onRequestClose={handleCloseModal} className="modal-content">
             <div className="grid grid-cols-2 gap-4">
@@ -253,7 +263,7 @@ const {editOrder, setEditOrder} = useOrdersStore()
                 <button onClick={handleCloseModal} className="bg-[#43a047] text-white px-4 py-2 rounded">
                     CLOSE
                 </button>
-                <button className="bg-[#43a047] text-white px-4 py-2 rounded">SUBMIT</button>
+                <button onClick={handleUpdateOrder(editOrder)} className="bg-[#43a047] text-white px-4 py-2 rounded">SUBMIT</button>
             </div>
         </Modal>
     )
