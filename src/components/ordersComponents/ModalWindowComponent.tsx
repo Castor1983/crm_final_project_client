@@ -62,11 +62,12 @@ const {editOrder, setEditOrder} = useOrdersStore()
     };
     const handleUpdateOrder = async () => {
         if (!editOrder) return;
-
+const orderId = editOrder.id?.toString()
+        const {course, sum, name, age, course_format, course_type, phone, group, alreadyPaid, status, surname, email} = editOrder
         try {
             await axios.patch(
-                `http://localhost:3001/api/orders/edit/${editOrder.id}`,
-                editOrder,
+                `http://localhost:3001/api/orders/edit/${orderId}`,
+                {course, sum, name, age, course_format, course_type, phone, group, alreadyPaid, status, surname, email},
                 {
                     headers: { Authorization: `Bearer ${accessToken}` }
                 }
