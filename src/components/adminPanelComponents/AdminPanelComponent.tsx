@@ -3,12 +3,14 @@ import axios from "axios";
 import {useAuthStore} from "../../store/auth.ts";
 import {useManagersStore} from "../../store/managers.ts";
 import ManagerComponent from "./ManagerComponent.tsx";
+import CreateManagerWindow from "./CreateManagerWindow.tsx";
 
 const AdminPanelComponent: FC =() => {
     const {accessToken} = useAuthStore()
     const { stats, setStats, managers, setManagers} = useManagersStore()
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -43,9 +45,9 @@ const AdminPanelComponent: FC =() => {
             <p>
                 total: {stats.total} In work: {stats.in_work} null: {stats.null_count}
                 Agree: {stats.agree} Disagree: {stats.disagree}
-                Dubbing: {stats.dubbing} | New: {stats.new}
+                Dubbing: {stats.dubbing}  New: {stats.new}
             </p>
-            <button className="bg-[#43a047] text-white px-4 py-2 rounded hover:bg-green-700">
+            <button onClick={() => setIsOpen(true)} className="bg-[#43a047] text-white px-4 py-2 rounded hover:bg-green-700">
                 CREATE
             </button>
             {managers.length > 0 ? (
@@ -56,6 +58,7 @@ const AdminPanelComponent: FC =() => {
             ) : (
                 <p>No managers found</p>
             )}
+            {isOpen && (<CreateManagerWindow isOpen={isOpen} setIsOpen={setIsOpen} />)}
         </div>
     );
 };
