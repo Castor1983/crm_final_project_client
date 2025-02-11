@@ -2,6 +2,8 @@ import React, {FC} from "react";
 import Modal from "react-modal";
 import {useManagersStore} from "../../store/managers.ts";
 import {ManagerInterface} from "../../interfaces/manager.interface.ts";
+import axios from "axios";
+import {useAuthStore} from "../../store/auth.ts";
 
 type Props = {
     isOpen: boolean,
@@ -10,14 +12,18 @@ type Props = {
 
 const CreateManagerWindow: FC<Props> = ({isOpen, setIsOpen}) => {
 const {manager, setManager} = useManagersStore()
+    const {accessToken}= useAuthStore()
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
         setManager({ ...manager, [e.target.name]: e.target.value });
     };
 
-    const handleCreate = () => {
-        console.log("Создан пользователь:", manager);
+    const handleCreate = async () => {
+        await axios.post( 'http://localhost:3001/api/managers', manager,  {
+            headers: { Authorization: `Bearer ${accessToken}` }
+        })
+
         setIsOpen(false);
         setManager({} as ManagerInterface)
     };
