@@ -37,16 +37,20 @@ const AdminPanelComponent: FC =() => {
     if (error) return <p>{error}</p>;
 
     return (
-        <div className={"bg-white"}>
+        <div className="flex-col items-center bg-white w-[100vh]">
             <h1>Orders Statistic</h1>
+
             <p>
-                total: {stats.total} | In work: {stats.in_work} | null: {stats.null_count} |
-                Agree: {stats.agree} | Disagree: {stats.disagree} |
+                total: {stats.total} In work: {stats.in_work} null: {stats.null_count}
+                Agree: {stats.agree} Disagree: {stats.disagree}
                 Dubbing: {stats.dubbing} | New: {stats.new}
             </p>
+            <button className="bg-[#43a047] text-white px-4 py-2 rounded hover:bg-green-700">
+                CREATE
+            </button>
             {managers.length > 0 ? (
                 managers.map((manager) => (
-                    <ManagerComponent key={manager.id} manager={manager} />
+                    <ManagerComponent key={manager.id} manager={manager}/>
 
                 ))
             ) : (

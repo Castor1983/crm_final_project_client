@@ -134,6 +134,7 @@ const orderId = editOrder.id?.toString()
                         } : null)}
                         className="bg-gray-200 p-2 rounded"
                     >
+                        <option value={StatusEnum.EMPTY}>-</option>
                         <option value={StatusEnum.INWORK}>In work</option>
                         <option value={StatusEnum.NEW}>New</option>
                         <option value={StatusEnum.AGREE}>Agree</option>
@@ -205,6 +206,7 @@ const orderId = editOrder.id?.toString()
                         } : null)}
                         className="bg-gray-200 p-2 rounded"
                     >
+                        <option value={CourseEnum.EMPTY}>-</option>
                         <option value={CourseEnum.FE}>FE</option>
                         <option value={CourseEnum.JCX}>JCX</option>
                         <option value={CourseEnum.FS}>FS</option>
@@ -234,6 +236,7 @@ const orderId = editOrder.id?.toString()
                         } : null)}
                         className="bg-gray-200 p-2 rounded"
                     >
+                        <option value={CourseFormatEnum.EMPTY}>-</option>
                         <option value={CourseFormatEnum.ONLINE}>online</option>
                         <option value={CourseFormatEnum.STATIC}>static</option>
                     </select>
@@ -260,6 +263,7 @@ const orderId = editOrder.id?.toString()
                         } : null)}
                         className="bg-gray-200 p-2 rounded"
                     >
+                        <option value={CourseTypeEnum.EMPTY}>-</option>
                         <option value={CourseTypeEnum.PRO}>pro</option>
                         <option value={CourseTypeEnum.INCUBATOR}>incubator</option>
                         <option value={CourseTypeEnum.VIP}>vip</option>

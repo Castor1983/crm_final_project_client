@@ -51,7 +51,7 @@ const OrdersComponent: FC = () => {
             }
         };
         fetchOrders();
-    }, [searchParams, sortConfig, currentPage, comments]);
+    }, [searchParams, sortConfig, currentPage, comments, editOrder]);
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
