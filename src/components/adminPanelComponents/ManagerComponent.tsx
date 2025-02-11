@@ -33,7 +33,7 @@ const ManagerComponent: FC<Props> = ({manager}) => {
                     <p>dubbing: {manager.orderStats.dubbing}</p>}
             </div>
             <div className="flex justify-between items-start ">
-                <button className="bg-[#43a047] hover:bg-green-700 rounded text-white px-4 py-1">ACTIVATE</button>
+                <button className="bg-[#43a047] hover:bg-green-700 rounded text-white px-4 py-1">{manager.is_active ? "RECOVERY PASSWORD" : "ACTIVATE"}</button>
                 <button className="bg-[#43a047] hover:bg-green-700 rounded text-white px-4 py-1">BAN</button>
                 <button className="bg-[#43a047] hover:bg-green-700 rounded text-white px-4 py-1">UNBAN</button>
             </div>
