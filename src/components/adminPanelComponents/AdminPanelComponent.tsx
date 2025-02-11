@@ -39,15 +39,15 @@ const AdminPanelComponent: FC =() => {
     if (error) return <p>{error}</p>;
 
     return (
-        <div className="flex-col items-center bg-white w-[100vh]">
-            <h1>Orders Statistic</h1>
+        <div className="w-[100%] flex-auto pl-40 pr-40">
+            <h1 className="text-center">Orders Statistic</h1>
 
-            <p>
+            <p className="text-center">
                 total: {stats.total} In work: {stats.in_work} null: {stats.null_count}
                 Agree: {stats.agree} Disagree: {stats.disagree}
                 Dubbing: {stats.dubbing}  New: {stats.new}
             </p>
-            <button onClick={() => setIsOpen(true)} className="bg-[#43a047] text-white px-4 py-2 rounded hover:bg-green-700">
+            <button onClick={() => setIsOpen(true)} className="bg-[#43a047] text-white px-4 py-1 text-[12px] rounded hover:bg-green-700">
                 CREATE
             </button>
             {managers.length > 0 ? (

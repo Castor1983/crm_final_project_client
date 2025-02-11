@@ -89,7 +89,7 @@ const orderId = editOrder.id?.toString()
                         <select
                             value={editOrder?.group || ""}
                             onChange={(e) => setEditOrder(editOrder ? {...editOrder, group: e.target.value} : null)}
-                            className="bg-gray-200 p-2 rounded"
+                            className="bg-gray-200 p-2 rounded focus:outline-none"
                         >
                             <option value="">Select group</option>
                             {groups.map((group, index) => (
@@ -101,23 +101,23 @@ const orderId = editOrder.id?.toString()
                             type="text"
                             value={newGroup}
                             onChange={(e) => setNewGroup(e.target.value)}
-                            className="bg-gray-200 p-2 rounded"
+                            className="bg-gray-200 p-2 rounded focus:outline-none"
                             placeholder="Group"
                         />
                     )}
 
                     {!isAddingGroup ? (
                         <button onClick={() => setIsAddingGroup(true)}
-                                className="mt-2 bg-[#43a047] text-white p-2 rounded">
+                                className="mt-2 bg-[#43a047] text-white p-2 rounded hover:bg-green-700">
                             ADD GROUP
                         </button>
                     ) : (
                         <div className="flex gap-2 mt-2">
-                            <button onClick={handleAddGroup} className="bg-[#43a047] text-white p-2 rounded">
+                            <button onClick={handleAddGroup} className="bg-[#43a047] text-white p-2 rounded hover:bg-green-700">
                                 ADD
                             </button>
                             <button onClick={() => setIsAddingGroup(false)}
-                                    className="bg-[#43a047] text-white p-2 rounded">
+                                    className="bg-[#43a047] text-white p-2 rounded hover:bg-green-700">
                                 SELECT
                             </button>
                         </div>
@@ -132,7 +132,7 @@ const orderId = editOrder.id?.toString()
                             ...editOrder,
                             status: e.target.value as StatusEnum
                         } : null)}
-                        className="bg-gray-200 p-2 rounded"
+                        className="bg-gray-200 p-2 rounded focus:outline-none"
                     >
                         <option value={StatusEnum.EMPTY}>-</option>
                         <option value={StatusEnum.INWORK}>In work</option>
@@ -149,7 +149,7 @@ const orderId = editOrder.id?.toString()
                         type="text"
                         value={editOrder?.name || ""}
                         onChange={(e) => setEditOrder(editOrder ? {...editOrder, name: e.target.value} : null)}
-                        className="bg-gray-200 p-2 rounded"
+                        className="bg-gray-200 p-2 rounded focus:outline-none"
                     />
                 </div>
 
@@ -159,7 +159,7 @@ const orderId = editOrder.id?.toString()
                         type="number"
                         value={editOrder?.sum || ""}
                         onChange={(e) => setEditOrder(editOrder ? {...editOrder, sum: Number(e.target.value)} : null)}
-                        className="bg-gray-200 p-2 rounded"
+                        className="bg-gray-200 p-2 rounded focus:outline-none"
                     />
                 </div>
 
@@ -169,7 +169,7 @@ const orderId = editOrder.id?.toString()
                         type="text"
                         value={editOrder?.surname || ""}
                         onChange={(e) => setEditOrder(editOrder ? {...editOrder, surname: e.target.value} : null)}
-                        className="bg-gray-200 p-2 rounded"
+                        className="bg-gray-200 p-2 rounded focus:outline-none"
                     />
                 </div>
 
@@ -182,7 +182,7 @@ const orderId = editOrder.id?.toString()
                             ...editOrder,
                             alreadyPaid: Number(e.target.value)
                         } : null)}
-                        className="bg-gray-200 p-2 rounded"
+                        className="bg-gray-200 p-2 rounded focus:outline-none"
                     />
                 </div>
 
@@ -192,7 +192,7 @@ const orderId = editOrder.id?.toString()
                         type="email"
                         value={editOrder?.email || ""}
                         onChange={(e) => setEditOrder(editOrder ? {...editOrder, email: e.target.value} : null)}
-                        className="bg-gray-200 p-2 rounded"
+                        className="bg-gray-200 p-2 rounded focus:outline-none"
                     />
                 </div>
 
@@ -204,7 +204,7 @@ const orderId = editOrder.id?.toString()
                             ...editOrder,
                             course: e.target.value as CourseEnum
                         } : null)}
-                        className="bg-gray-200 p-2 rounded"
+                        className="bg-gray-200 p-2 rounded focus:outline-none"
                     >
                         <option value={CourseEnum.EMPTY}>-</option>
                         <option value={CourseEnum.FE}>FE</option>
@@ -222,7 +222,7 @@ const orderId = editOrder.id?.toString()
                         type="text"
                         value={editOrder?.phone || ""}
                         onChange={(e) => setEditOrder(editOrder ? {...editOrder, phone: e.target.value} : null)}
-                        className="bg-gray-200 p-2 rounded"
+                        className="bg-gray-200 p-2 rounded focus:outline-none"
                     />
                 </div>
 
@@ -234,7 +234,7 @@ const orderId = editOrder.id?.toString()
                             ...editOrder,
                             course_format: e.target.value as CourseFormatEnum
                         } : null)}
-                        className="bg-gray-200 p-2 rounded"
+                        className="bg-gray-200 p-2 rounded focus:outline-none"
                     >
                         <option value={CourseFormatEnum.EMPTY}>-</option>
                         <option value={CourseFormatEnum.ONLINE}>online</option>
@@ -248,7 +248,7 @@ const orderId = editOrder.id?.toString()
                         type="number"
                         value={editOrder?.age || ""}
                         onChange={(e) => setEditOrder(editOrder ? {...editOrder, age: Number(e.target.value)} : null)}
-                        className="bg-gray-200 p-2 rounded"
+                        className="bg-gray-200 p-2 rounded focus:outline-none"
                     />
                 </div>
 
@@ -274,10 +274,10 @@ const orderId = editOrder.id?.toString()
             </div>
 
             <div className="flex justify-end gap-2 mt-4">
-                <button onClick={handleCloseModal} className="bg-[#43a047] text-white px-4 py-2 rounded">
+                <button onClick={handleCloseModal} className="bg-[#43a047] text-white px-4 py-2 rounded hover:bg-green-700">
                     CLOSE
                 </button>
-                <button onClick={handleUpdateOrder} className="bg-[#43a047] text-white px-4 py-2 rounded">SUBMIT</button>
+                <button onClick={handleUpdateOrder} className="bg-[#43a047] text-white px-4 py-2 rounded hover:bg-green-700">SUBMIT</button>
             </div>
         </Modal>
     )

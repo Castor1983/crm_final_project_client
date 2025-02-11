@@ -60,7 +60,7 @@ const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
                             value={comment}
                             onChange={(e) => setComment(e.target.value)}
                             placeholder="Comment"
-                            className=" p-2 w-full rounded-[5px] bg-white"
+                            className=" p-2 w-full rounded-[5px] bg-gray-200 focus:outline-none"
                         />
                         <button
                             onClick={() => {
@@ -68,14 +68,14 @@ const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
                                     handleSubmitComment(order.id)
                                 }
                             }}
-                            className="bg-[#43a047] text-white px-4 py-2 mt-2 rounded-[5px]"
+                            className="bg-[#43a047] text-white px-4 py-2 mt-2 rounded-[5px] hover:bg-green-700"
                         >
                             Submit
                         </button>
                         <div>
                             <button
                                 onClick={() => handleOpenModal(order)}
-                                className="bg-[#43a047] text-white px-4 py-2 mt-2 rounded-[5px]"
+                                className="bg-[#43a047] text-white px-4 py-2 mt-2 rounded-[5px] hover:bg-green-700"
                             >
                                 Edit
                             </button>

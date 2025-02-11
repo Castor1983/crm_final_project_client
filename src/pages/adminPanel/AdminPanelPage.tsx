@@ -6,7 +6,7 @@ const AdminPanelPage: FC = () => {
 
     return (
         <LayoutComponent>
-            <div className="flex min-h-screen items-center justify-center">
+            <div className="flex">
                 <AdminPanelComponent/>
             </div>
         </LayoutComponent>

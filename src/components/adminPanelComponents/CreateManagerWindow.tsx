@@ -40,7 +40,7 @@ const {manager, setManager} = useManagersStore()
                 placeholder="Email"
                 value={manager.email}
                 onChange={handleChange}
-                className="w-full p-2 border rounded mb-2"
+                className="w-full p-2 bg-gray-200 focus:outline-none rounded mb-2"
                 autoFocus
             />
             <label>Name</label>
@@ -50,7 +50,7 @@ const {manager, setManager} = useManagersStore()
                 placeholder="Name"
                 value={manager.name}
                 onChange={handleChange}
-                className="w-full p-2 border rounded mb-2"
+                className="w-full p-2 bg-gray-200 rounded focus:outline-none mb-2"
             />
             <label>Surname</label>
             <input
@@ -59,7 +59,7 @@ const {manager, setManager} = useManagersStore()
                 placeholder="Surname"
                 value={manager.surname}
                 onChange={handleChange}
-                className="w-full p-2 border rounded mb-4"
+                className="w-full p-2 bg-gray-200 rounded focus:outline-none mb-4"
             />
 
             <div className="flex justify-end space-x-2">
@@ -68,13 +68,13 @@ const {manager, setManager} = useManagersStore()
                         setIsOpen(false)
                         setManager({} as ManagerInterface)
                     }}
-                    className="px-4 py-2 bg-[#43a047] rounded text-white"
+                    className="px-4 py-2 bg-[#43a047] rounded text-white hover:bg-green-700"
                 >
                     Close
                 </button>
                 <button
                     onClick={handleCreate}
-                    className="px-4 py-2 bg-[#43a047] text-white rounded"
+                    className="px-4 py-2 bg-[#43a047] text-white rounded hover:bg-green-700"
                 >
                     Create
                 </button>
