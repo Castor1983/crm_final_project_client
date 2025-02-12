@@ -7,7 +7,7 @@ import {usePaginationStore} from "../../store/pagination.ts";
 import PaginationComponent from "../paginationComponents/PaginationCOmponent.tsx";
 import {useSearchParams} from "react-router-dom";
 import {useSortConfigStore} from "../../store/sortConfig.ts";
-import ModalWindowComponent from "./ModalWindowComponent.tsx";
+import OrderUpdateComponent from "./OrderUpdateComponent.tsx";
 import {useCommentsStore} from "../../store/comments.ts";
 import OrdersTableComponent from "./OrdersTableComponent.tsx";
 
@@ -74,7 +74,7 @@ const OrdersComponent: FC = () => {
                 onPageChange={handlePageChange}
             />
             {isModalOpen && editOrder && (
-                <ModalWindowComponent isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
+                <OrderUpdateComponent isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
             )}
         </div>
     );

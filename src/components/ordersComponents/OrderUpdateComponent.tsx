@@ -13,7 +13,7 @@ type Props = {
     isModalOpen: boolean
     setIsModalOpen: (open: boolean) => void
 }
-const ModalWindowComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
+const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
 const {editOrder, setEditOrder} = useOrdersStore()
     const {groups, setGroups, newGroup, setNewGroup}=useGroupsStore()
     const accessToken = useAuthStore.getState().accessToken
@@ -261,7 +261,7 @@ const orderId = editOrder.id?.toString()
                             ...editOrder,
                             course_type: e.target.value as CourseTypeEnum
                         } : null)}
-                        className="bg-gray-200 p-2 rounded"
+                        className="bg-gray-200 p-2 rounded focus:outline-none"
                     >
                         <option value={CourseTypeEnum.EMPTY}>-</option>
                         <option value={CourseTypeEnum.PRO}>pro</option>
@@ -283,4 +283,4 @@ const orderId = editOrder.id?.toString()
     )
 }
 
-export default ModalWindowComponent;
+export default OrderUpdateComponent;
