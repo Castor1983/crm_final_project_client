@@ -29,7 +29,7 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onSubmit }) => {
             />
             {errors.password && <p className="text-red-500">{errors.password.message}</p>}
 
-            <button type="submit" className="w-full bg-[#43a047] text-white p-2 rounded mt-4">
+            <button type="submit" className="w-full bg-[#43a047] hover:bg-green-700 text-white p-2 rounded mt-4">
                 LOGIN
             </button>
         </form>

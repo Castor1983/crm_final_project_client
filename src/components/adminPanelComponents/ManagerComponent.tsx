@@ -5,11 +5,13 @@ import {useAuthStore} from "../../store/auth.ts";
 
 type Props = {
     manager: ManagerInterface
+    onUpdate: () => void;
 }
 
-const ManagerComponent: FC<Props> = ({manager}) => {
+const ManagerComponent: FC<Props> = ({manager, onUpdate}) => {
     const accessToken = useAuthStore().accessToken
     const [activationLink, setActivationLink] = useState("");
+    const [ban, setBan] = useState<boolean>(manager.is_banned)
     const [buttonText, setButtonText] = useState(manager.is_active ? "RECOVERY PASSWORD" : "ACTIVATE");
 
     const handleActivate = async () => {
@@ -42,6 +44,34 @@ const ManagerComponent: FC<Props> = ({manager}) => {
             setTimeout(() => setButtonText("COPY TO CLIPBOARD"), 2000);
         }
     };
+    const handleBan = async () => {
+        try {
+            await axios.patch(`http://localhost:3001/api/managers/ban/${manager.id}`,
+                {},
+                { headers: { Authorization: `Bearer ${accessToken}` } }
+            );
+            setBan(true);
+            setButtonText("ACTIVATE")
+            onUpdate();
+        } catch (error) {
+            console.error("Ban error:", error);
+        }
+    };
+
+    const handleUnban = async () => {
+        try {
+            await axios.patch(`http://localhost:3001/api/managers/unban/${manager.id}`,
+                {},
+                { headers: { Authorization: `Bearer ${accessToken}` } }
+            );
+            setBan(false);
+            onUpdate();
+            setButtonText("RECOVERY PASSWORD")
+        } catch (error) {
+            console.error("Unban error:", error);
+        }
+    };
+
 
     return (
         <div className="grid grid-cols-3 m-2 p-3 rounded border-1 border-green-500  text-[12px]">
@@ -83,8 +113,12 @@ const ManagerComponent: FC<Props> = ({manager}) => {
                 >
                     {buttonText}
                 </button>
-                <button className="bg-[#43a047] hover:bg-green-700 rounded text-white px-4 py-1">BAN</button>
-                <button className="bg-[#43a047] hover:bg-green-700 rounded text-white px-4 py-1">UNBAN</button>
+                <button  onClick={ban ? handleUnban : handleBan}
+                         className="bg-[#43a047] hover:bg-green-700 rounded text-white px-4 py-1 transition-all duration-200"
+                >
+                    {ban ? "UNBAN" : "BAN"}
+                </button>
+
             </div>
         </div>
     );

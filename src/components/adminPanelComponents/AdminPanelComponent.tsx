@@ -12,26 +12,25 @@ const AdminPanelComponent: FC =() => {
     const [error, setError] = useState<string | null>(null);
     const [isOpen, setIsOpen] = useState(false);
 
+    const fetchData = async () => {
+        try {
+            const  managersResponse = await
+                axios.get('http://localhost:3001/api/managers', {//TODO
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                } );
+
+            setStats(managersResponse.data.orderStats);
+            setManagers(managersResponse.data.data);
+        } catch (err) {
+            console.error("Error fetching data:", err);
+            setError("Failed to load data");
+        } finally {
+            setLoading(false);
+        }
+    };
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const  managersResponse = await
-                    axios.get('http://localhost:3001/api/managers', {//TODO
-                        headers: {
-                            Authorization: `Bearer ${accessToken}`,
-                        },
-                    } );
-
-                setStats(managersResponse.data.orderStats);
-                setManagers(managersResponse.data.data);
-            } catch (err) {
-                console.error("Error fetching data:", err);
-                setError("Failed to load data");
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchData();
     }, []);
 
@@ -52,7 +51,7 @@ const AdminPanelComponent: FC =() => {
             </button>
             {managers.length > 0 ? (
                 managers.map((manager) => (
-                    <ManagerComponent key={manager.id} manager={manager}/>
+                    <ManagerComponent key={manager.id} manager={manager} onUpdate={fetchData}/>
 
                 ))
             ) : (
