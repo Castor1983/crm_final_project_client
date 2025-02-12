@@ -8,17 +8,19 @@ type Props = {
 }
 
 const ManagerComponent: FC<Props> = ({manager}) => {
-    const {accessToken} = useAuthStore()
+    const accessToken = useAuthStore().accessToken
     const [activationLink, setActivationLink] = useState("");
     const [buttonText, setButtonText] = useState(manager.is_active ? "RECOVERY PASSWORD" : "ACTIVATE");
 
     const handleActivate = async () => {
         const response = await axios.post(`http://localhost:3001/api/managers/activate/manager/${manager.id}`,
-        {
+            {},
+            {
             headers: { Authorization: `Bearer ${accessToken}` }
         }
         )
         setActivationLink(response.data.activationLink);
+        console.log(response.data.activationLink)
         setButtonText("COPY TO CLIPBOARD");
     }
     const copyToClipboard = () => {
