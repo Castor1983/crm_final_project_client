@@ -20,9 +20,21 @@ const ManagerComponent: FC<Props> = ({manager}) => {
         }
         )
         setActivationLink(response.data.activationLink);
-        console.log(response.data.activationLink)
         setButtonText("COPY TO CLIPBOARD");
     }
+
+    const handleRecovery = async () => {
+        const response = await axios.post(`http://localhost:3001/api/managers/deactivate/${manager.id}`,
+            {},
+            {
+                headers: { Authorization: `Bearer ${accessToken}` }
+            }
+        )
+        setActivationLink(response.data.activationLink);
+        setButtonText("COPY TO CLIPBOARD");
+    }
+
+
     const copyToClipboard = () => {
         if (activationLink) {
             navigator.clipboard.writeText(activationLink);
@@ -58,7 +70,15 @@ const ManagerComponent: FC<Props> = ({manager}) => {
             </div>
             <div className="flex justify-between items-start ">
                 <button
-                    onClick={activationLink ? copyToClipboard : handleActivate}
+                    onClick={() => {
+                        if (buttonText === "RECOVERY PASSWORD") {
+                            handleRecovery();
+                        } else if (activationLink) {
+                            copyToClipboard();
+                        } else {
+                            handleActivate();
+                        }
+                    }}
                     className="bg-[#43a047] hover:bg-green-700 rounded text-white px-4 py-1"
                 >
                     {buttonText}

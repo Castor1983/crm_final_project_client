@@ -3,7 +3,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 
 const ActivateManagerComponent: FC = () => {
-    const { activateToken } = useParams(); // Получаем токен из URL
+    const { activateToken } = useParams();
     const navigate = useNavigate();
 
     const [password, setPassword] = useState("");
@@ -38,7 +38,7 @@ const ActivateManagerComponent: FC = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-green-700">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-[#43a047]">
             {message && <p className="text-red-500">{message}</p>}
             <form onSubmit={handleSubmit} className="mt-4 flex flex-col gap-2 bg-white rounded-2xl p-5">
                 <label>Password</label>
@@ -59,7 +59,7 @@ const ActivateManagerComponent: FC = () => {
                     className="bg-gray-200 p-2 rounded"
                     required
                 />
-                <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
+                <button type="submit" className="bg-[#43a047] hover:bg-green-700 text-white px-4 py-2 rounded">
                     ACTIVATE
                 </button>
             </form>
