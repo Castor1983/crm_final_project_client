@@ -1,15 +1,38 @@
-import {FC} from "react";
+import {FC, useState} from "react";
 import {ManagerInterface} from "../../interfaces/manager.interface.ts";
+import axios from "axios";
+import {useAuthStore} from "../../store/auth.ts";
 
 type Props = {
     manager: ManagerInterface
 }
 
 const ManagerComponent: FC<Props> = ({manager}) => {
+    const {accessToken} = useAuthStore()
+    const [activationLink, setActivationLink] = useState("");
+    const [buttonText, setButtonText] = useState(manager.is_active ? "RECOVERY PASSWORD" : "ACTIVATE");
+
+    const handleActivate = async () => {
+        const response = await axios.post(`http://localhost:3001/api/managers/activate/manager/${manager.id}`,
+        {
+            headers: { Authorization: `Bearer ${accessToken}` }
+        }
+        )
+        setActivationLink(response.data.activationLink);
+        setButtonText("COPY TO CLIPBOARD");
+    }
+    const copyToClipboard = () => {
+        if (activationLink) {
+            navigator.clipboard.writeText(activationLink);
+            setButtonText("COPIED! ✅");
+            setTimeout(() => setButtonText("COPY TO CLIPBOARD"), 2000);
+        }
+    };
+
     return (
         <div className="grid grid-cols-3 m-2 p-3 rounded border-1 border-green-500  text-[12px]">
 
-            <div className="">
+            <div>
                 <p>id: {manager.id}</p>
                 <p>email: {manager.email}</p>
                 <p>name: {manager.name}</p>
@@ -17,7 +40,6 @@ const ManagerComponent: FC<Props> = ({manager}) => {
                 <p>is_active: {manager.is_active ? "true" : "false"}</p>
                 <p>last_login: {manager.last_login || "null"}</p>
             </div>
-
 
             <div>
                 <p>total: {manager.orderStats.total || "null"}</p>
@@ -33,7 +55,12 @@ const ManagerComponent: FC<Props> = ({manager}) => {
                     <p>dubbing: {manager.orderStats.dubbing}</p>}
             </div>
             <div className="flex justify-between items-start ">
-                <button className="bg-[#43a047] hover:bg-green-700 rounded text-white px-4 py-1">{manager.is_active ? "RECOVERY PASSWORD" : "ACTIVATE"}</button>
+                <button
+                    onClick={activationLink ? copyToClipboard : handleActivate}
+                    className="bg-[#43a047] hover:bg-green-700 rounded text-white px-4 py-1"
+                >
+                    {buttonText}
+                </button>
                 <button className="bg-[#43a047] hover:bg-green-700 rounded text-white px-4 py-1">BAN</button>
                 <button className="bg-[#43a047] hover:bg-green-700 rounded text-white px-4 py-1">UNBAN</button>
             </div>
