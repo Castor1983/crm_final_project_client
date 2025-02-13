@@ -40,6 +40,7 @@ const OrdersComponent: FC = () => {
                     },
                     params: params,
                 });
+                console.log(response.data.data)
                 setOrders(response.data.data);
                 setTotalPages(response.data.total_pages);
 

@@ -77,7 +77,7 @@ const OrdersTableComponent: FC<Props> =({setIsModalOpen}) => {
                 </tr>
                 </thead>
                 <tbody>
-                {orders.map((order: Order, index: number) => (
+                {orders?.map((order: Order, index: number) => (
                     <React.Fragment key={order.id}>
                         <tr
                             onClick={() => handleExpandOrder(order.id)}

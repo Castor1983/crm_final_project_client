@@ -1,4 +1,4 @@
-import {FC, useCallback, useMemo, useState} from "react";
+import {FC, useCallback, useEffect, useMemo, useState} from "react";
 import {FaFileExcel} from "react-icons/fa";
 import { debounce } from "lodash";
 import {useSearchParams} from "react-router-dom";
@@ -8,41 +8,63 @@ import {CourseTypeEnum} from "../../enums/courseType.enum.ts";
 import {StatusEnum} from "../../enums/status.enum.ts";
 import {useGroupsStore} from "../../store/groups.ts";
 import { RiResetRightFill} from "react-icons/ri";
+import {useAuthStore} from "../../store/auth.ts";
+import axios from "axios";
 
 
 const FilterOrdersComponent: FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
-    const {groups} = useGroupsStore()
+    const {groups, setGroups} = useGroupsStore()
+    const {accessToken} = useAuthStore()
     const [filters, setFilters] = useState({
         name: searchParams.get("name") || "",
         surname: searchParams.get("surname") || "",
         email: searchParams.get("email") || "",
         phone: searchParams.get("phone") || "",
         age: searchParams.get("age") || "",
-        course: searchParams.get("course") || "",
-        course_format: searchParams.get("course_format") || "",
-        course_type: searchParams.get("course_type") || "",
-        status: searchParams.get("status") || "",
+        course: searchParams.get("course") || CourseEnum.EMPTY,
+        course_format: searchParams.get("course_format") ||CourseFormatEnum.EMPTY,
+        course_type: searchParams.get("course_type") || CourseTypeEnum.EMPTY,
+        status: searchParams.get("status") || StatusEnum.EMPTY,
         group: searchParams.get("group") || "",
         manager: searchParams.get("manager") === "true",
     });
 
+    useEffect(() => {
+        fetchGroups()
+    }, []);
+    const fetchGroups = async () => {
+        try {
+            const response = await axios.get("http://localhost:3001/api/orders/groups", {//TODO
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                }
+            });
+            setGroups(response.data);
+        } catch (error) {
+            console.error("Помилка при отриманні груп:", error);
+        }
+    }
+
+
     const debouncedUpdateFilters = useMemo(
-        () => debounce((newFilters) => {
-            const filteredParams = Object.fromEntries(
-                Object.entries(newFilters).filter(([_, value]) => value !== "" && value !== false)
-            );
-            setSearchParams(filteredParams);
-        }, 500),
+        () =>
+            debounce((newFilters) => {
+                const filteredParams = Object.fromEntries(
+                    Object.entries(newFilters).filter(([_, value]) => value !== "" && value !== false)
+                );
+                setSearchParams(filteredParams);
+            }, 500),
         [setSearchParams]
     );
 
-
-    const updateFilters = useCallback((newFilters) => {
-        setFilters(newFilters);
-        debouncedUpdateFilters(newFilters);
-    }, [debouncedUpdateFilters]);
-
+    const updateFilters = useCallback(
+        (newFilters) => {
+            setFilters((prevFilters) => ({ ...prevFilters, ...newFilters }));
+            debouncedUpdateFilters(newFilters);
+        },
+        [debouncedUpdateFilters]
+    );
 
     return (
         <div className="grid grid-cols-6 grid-rows-2">
@@ -77,10 +99,11 @@ const FilterOrdersComponent: FC = () => {
             />
             <input
                 type="number"
+                style={{ appearance: "textfield" }}
                 placeholder="Age"
                 value={filters.age}
                 onChange={(e) => updateFilters({...filters, age: e.target.value})}
-                className="bg-gray-200 p-2 rounded focus:outline-none m-1"
+                className="bg-gray-200 p-2 rounded focus:outline-none m-1 "
             />
             <select
                 value={filters.course}
@@ -148,7 +171,7 @@ const FilterOrdersComponent: FC = () => {
                     />
                     My
                 </label>
-                <button onClick={() => updateFilters({name: "", surname: "", email: "", myOrders: false})}
+                <button onClick={() => updateFilters({name: "", surname: "", email: "",  phone: "", age: "", course: CourseEnum.EMPTY, course_type: CourseTypeEnum.EMPTY, course_format: CourseFormatEnum.EMPTY, status: StatusEnum.EMPTY, group: "", manager: false})}
                         className="bg-[#43a047] hover:bg-green-700 text-white m-1 p-2 rounded flex items-center gap-2">
                     <RiResetRightFill size={20}/>
 
