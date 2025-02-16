@@ -1,4 +1,7 @@
 import {FC, useCallback, useEffect, useMemo, useState} from "react";
+import * as ExcelJS from 'exceljs';
+import { saveAs } from "file-saver";
+
 import {FaFileExcel} from "react-icons/fa";
 import { debounce } from "lodash";
 import {useSearchParams} from "react-router-dom";
@@ -10,11 +13,14 @@ import {useGroupsStore} from "../../store/groups.ts";
 import { RiResetRightFill} from "react-icons/ri";
 import {useAuthStore} from "../../store/auth.ts";
 import axios from "axios";
+import {useOrdersStore} from "../../store/orders.ts";
+import {COLUMNS_NAME} from "../../constants/constants.ts";
 
 
 const FilterOrdersComponent: FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const {groups, setGroups} = useGroupsStore()
+    const {orders} =useOrdersStore()
     const {accessToken} = useAuthStore()
     const [filters, setFilters] = useState({
         name: searchParams.get("name") || "",
@@ -65,6 +71,27 @@ const FilterOrdersComponent: FC = () => {
         },
         [debouncedUpdateFilters]
     );
+const exportToExcel =  async () => {
+
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Orders');
+
+    worksheet.columns = COLUMNS_NAME.orderExcelColumns.map(col => ({
+        header: col.header,
+        key: col.key,
+        width: col.width || 20,
+    }));
+
+    orders.forEach((order) => {
+        worksheet.addRow(order);
+    });
+
+
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+    saveAs(blob, "orders.xlsx");
+
+    }
 
     return (
         <div className="grid grid-cols-6 grid-rows-2">
@@ -176,7 +203,7 @@ const FilterOrdersComponent: FC = () => {
                     <RiResetRightFill size={20}/>
 
                 </button>
-                <button onClick={() => updateFilters({name: "", surname: "", email: "", myOrders: false})}
+                <button onClick={exportToExcel}
                         className="bg-[#43a047] hover:bg-green-700 text-white m-1 p-2 rounded flex items-center gap-2">
                     <FaFileExcel size={20}/>
                 </button>

@@ -57,8 +57,8 @@ const OrdersTableComponent: FC<Props> =({setIsModalOpen}) => {
         setCurrentPage(1);
     };
     return (
-        <div className="overflow-x-auto shadow-md rounded-lg">
-            <table className="min-w-full table-auto">
+        <div className="overflow-x-auto shadow-md rounded-lg min-w-[100vh]">
+            <table className="min-w-[100vh] table-auto">
                 <thead>
                 <tr className="bg-gray-100">
                     {[
