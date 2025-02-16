@@ -13,15 +13,14 @@ import {useGroupsStore} from "../../store/groups.ts";
 import { RiResetRightFill} from "react-icons/ri";
 import {useAuthStore} from "../../store/auth.ts";
 import axios from "axios";
-import {useOrdersStore} from "../../store/orders.ts";
-import {COLUMNS_NAME} from "../../constants/constants.ts";
+import {COLUMNS_NAME} from "../../common/constants.ts";
+import {Order} from "../../interfaces/order.interface.ts";
 
 
 const FilterOrdersComponent: FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
-    const {groups, setGroups} = useGroupsStore()
-    const {orders} =useOrdersStore()
-    const {accessToken} = useAuthStore()
+    const {groups, setGroups} = useGroupsStore();
+    const {accessToken} = useAuthStore();
     const [filters, setFilters] = useState({
         name: searchParams.get("name") || "",
         surname: searchParams.get("surname") || "",
@@ -72,7 +71,18 @@ const FilterOrdersComponent: FC = () => {
         [debouncedUpdateFilters]
     );
 const exportToExcel =  async () => {
+        const params = {
+            ...Object.fromEntries(searchParams.entries())
+        };
 
+        const response = await axios.get("http://localhost:3001/api/orders/export", {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+            params: params,
+        });
+    const orders: Order[] = response.data.data
+    console.log(orders)
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet('Orders');
 
@@ -85,7 +95,6 @@ const exportToExcel =  async () => {
     orders.forEach((order) => {
         worksheet.addRow(order);
     });
-
 
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
