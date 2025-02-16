@@ -2,6 +2,7 @@ import {FC, useState} from "react";
 import {ManagerInterface} from "../../interfaces/manager.interface.ts";
 import axios from "axios";
 import {useAuthStore} from "../../store/auth.ts";
+import {urls} from "../../common/urls.ts";
 
 type Props = {
     manager: ManagerInterface
@@ -15,7 +16,7 @@ const ManagerComponent: FC<Props> = ({manager, onUpdate}) => {
     const [buttonText, setButtonText] = useState(manager.is_active ? "RECOVERY PASSWORD" : "ACTIVATE");
 
     const handleActivate = async () => {
-        const response = await axios.post(`http://localhost:3001/api/managers/activate/manager/${manager.id}`,
+        const response = await axios.post(urls.managers.activateManager(manager.id),
             {},
             {
             headers: { Authorization: `Bearer ${accessToken}` }
@@ -26,7 +27,7 @@ const ManagerComponent: FC<Props> = ({manager, onUpdate}) => {
     }
 
     const handleRecovery = async () => {
-        const response = await axios.post(`http://localhost:3001/api/managers/deactivate/${manager.id}`,
+        const response = await axios.post(urls.managers.deactivate(manager.id),
             {},
             {
                 headers: { Authorization: `Bearer ${accessToken}` }
@@ -46,7 +47,7 @@ const ManagerComponent: FC<Props> = ({manager, onUpdate}) => {
     };
     const handleBan = async () => {
         try {
-            await axios.patch(`http://localhost:3001/api/managers/ban/${manager.id}`,
+            await axios.patch(urls.managers.ban(manager.id),
                 {},
                 { headers: { Authorization: `Bearer ${accessToken}` } }
             );
@@ -60,7 +61,7 @@ const ManagerComponent: FC<Props> = ({manager, onUpdate}) => {
 
     const handleUnban = async () => {
         try {
-            await axios.patch(`http://localhost:3001/api/managers/unban/${manager.id}`,
+            await axios.patch(urls.managers.unban(manager.id),
                 {},
                 { headers: { Authorization: `Bearer ${accessToken}` } }
             );

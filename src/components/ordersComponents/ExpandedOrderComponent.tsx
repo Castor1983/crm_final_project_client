@@ -4,6 +4,7 @@ import axios from "axios";
 import {useCommentsStore} from "../../store/comments.ts";
 import {Order} from "../../interfaces/order.interface.ts";
 import {useOrdersStore} from "../../store/orders.ts";
+import {urls} from "../../common/urls.ts";
 
 type Props = {
     setIsModalOpen: (open: boolean) => void
@@ -17,7 +18,7 @@ const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
 
     const handleSubmitComment = async (orderId: number) => {
         try {
-            await axios.post(`http://localhost:3001/api/orders/addComment/${orderId}`, {
+            await axios.post(urls.orders.addComment(orderId), {
                 body: comment,
             }, {
                 headers: { Authorization: `Bearer ${accessToken}` },

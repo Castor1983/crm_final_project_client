@@ -8,6 +8,7 @@ import {useOrdersStore} from "../../store/orders.ts";
 import {useGroupsStore} from "../../store/groups.ts";
 import axios from "axios";
 import {useAuthStore} from "../../store/auth.ts";
+import {urls} from "../../common/urls.ts";
 
 type Props = {
     isModalOpen: boolean
@@ -21,7 +22,7 @@ const {editOrder, setEditOrder} = useOrdersStore()
     useEffect(() => {
         const fetchGroups = async () => {
             try {
-                const response = await axios.get("http://localhost:3001/api/orders/groups", {//TODO
+                const response = await axios.get(urls.orders.groups, {//TODO
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                     }});
@@ -42,7 +43,7 @@ const {editOrder, setEditOrder} = useOrdersStore()
         }
         try {
             const response = await axios.post(
-                "http://localhost:3001/api/orders/groups", //TODO
+                urls.orders.groups, //TODO
                 { name: newGroup },
                 {
                     headers: { Authorization: `Bearer ${accessToken}` }
@@ -66,7 +67,7 @@ const orderId = editOrder.id?.toString()
         const {course, sum, name, age, course_format, course_type, phone, group, alreadyPaid, status, surname, email} = editOrder
         try {
             await axios.patch(
-                `http://localhost:3001/api/orders/edit/${orderId}`,
+                urls.orders.editOrder(orderId),
                 {course, sum, name, age, course_format, course_type, phone, group, alreadyPaid, status, surname, email},
                 {
                     headers: { Authorization: `Bearer ${accessToken}` }

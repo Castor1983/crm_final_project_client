@@ -4,6 +4,7 @@ import {useAuthStore} from "../../store/auth.ts";
 import {useManagersStore} from "../../store/managers.ts";
 import ManagerComponent from "./ManagerComponent.tsx";
 import CreateManagerWindow from "./CreateManagerWindow.tsx";
+import {managersUrl} from "../../common/urls.ts";
 
 const AdminPanelComponent: FC =() => {
     const {accessToken} = useAuthStore()
@@ -15,7 +16,7 @@ const AdminPanelComponent: FC =() => {
     const fetchData = async () => {
         try {
             const  managersResponse = await
-                axios.get('http://localhost:3001/api/managers', {//TODO
+                axios.get(managersUrl, {//TODO
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                     },

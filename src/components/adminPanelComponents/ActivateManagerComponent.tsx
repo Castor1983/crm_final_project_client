@@ -1,6 +1,7 @@
 import {FC, useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
+import {urls} from "../../common/urls.ts";
 
 const ActivateManagerComponent: FC = () => {
     const { activateToken } = useParams();
@@ -26,7 +27,7 @@ const ActivateManagerComponent: FC = () => {
         }
 
         try {
-             await axios.post(`http://localhost:3001/api/managers/activate/${activateToken}`, {
+             await axios.post(urls.managers.activatePassword(activateToken), {
                 password: password, confirmPassword: confirmPassword
             });
 

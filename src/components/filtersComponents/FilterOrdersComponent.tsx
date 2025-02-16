@@ -15,6 +15,7 @@ import {useAuthStore} from "../../store/auth.ts";
 import axios from "axios";
 import {COLUMNS_NAME} from "../../common/constants.ts";
 import {Order} from "../../interfaces/order.interface.ts";
+import {urls} from "../../common/urls.ts";
 
 
 const FilterOrdersComponent: FC = () => {
@@ -40,7 +41,7 @@ const FilterOrdersComponent: FC = () => {
     }, []);
     const fetchGroups = async () => {
         try {
-            const response = await axios.get("http://localhost:3001/api/orders/groups", {//TODO
+            const response = await axios.get(urls.orders.groups, {//TODO
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 }
@@ -75,7 +76,7 @@ const exportToExcel =  async () => {
             ...Object.fromEntries(searchParams.entries())
         };
 
-        const response = await axios.get("http://localhost:3001/api/orders/export", {
+        const response = await axios.get(urls.orders.exportToExcel, {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
             },

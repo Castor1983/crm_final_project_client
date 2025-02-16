@@ -4,6 +4,7 @@ import {useManagersStore} from "../../store/managers.ts";
 import {ManagerInterface} from "../../interfaces/manager.interface.ts";
 import axios from "axios";
 import {useAuthStore} from "../../store/auth.ts";
+import {managersUrl} from "../../common/urls.ts";
 
 type Props = {
     isOpen: boolean,
@@ -20,7 +21,7 @@ const {manager, setManager} = useManagersStore()
     };
 
     const handleCreate = async () => {
-        await axios.post( 'http://localhost:3001/api/managers', manager,  {
+        await axios.post( managersUrl, manager,  {
             headers: { Authorization: `Bearer ${accessToken}` }
         })
 
