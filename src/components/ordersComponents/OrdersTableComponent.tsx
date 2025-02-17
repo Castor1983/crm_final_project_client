@@ -10,6 +10,7 @@ import {useOrdersStore} from "../../store/orders.ts";
 import {usePaginationStore} from "../../store/pagination.ts";
 import {apiAuth} from "../../services/api.ts";
 import {urls} from "../../common/urls.ts";
+import {COLUMNS_NAME} from "../../common/constants.ts";
 
 type Props = {
     setIsModalOpen: (open: boolean) => void
@@ -21,6 +22,7 @@ const OrdersTableComponent: FC<Props> =({setIsModalOpen}) => {
     const { orders} = useOrdersStore();
     const [, setSearchParams] = useSearchParams();
     const {setCurrentPage} = usePaginationStore();
+    const excludedColumns = ["msg", "utm"];
 
 
     const handleExpandOrder = async (orderId: number| null) => {
@@ -57,11 +59,7 @@ const OrdersTableComponent: FC<Props> =({setIsModalOpen}) => {
             <table className="min-w-[100vh] table-auto">
                 <thead>
                 <tr className="bg-gray-100">
-                    {[
-                        "id", "name", "surname", "email", "phone", "age", "course",
-                        "course_format", "course_type", "status", "sum", "alreadyPaid",
-                        "msg", "utm", "group", "manager", "created_at"  // TODO
-                    ].map((col) => (
+                    {COLUMNS_NAME.orderColumnsName.map((col) => (
                         <th
                             key={col}
                             onClick={() => handleSort(col)}
@@ -79,12 +77,14 @@ const OrdersTableComponent: FC<Props> =({setIsModalOpen}) => {
                             onClick={() => handleExpandOrder(order.id)}
                                 className={`hover:bg-[#43a047] cursor-pointer ${index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}`}
                         >
-                            {Object.keys(order).map((key) => {
-                                const typedKey = key as keyof Order;
-                                return (
-                                    <td key={key} className="px-1 py-1 text-[12px]">
-                                        {renderValue(order[typedKey])}
-                                    </td>
+                            {Object.keys(order)
+                                .filter((key) => !excludedColumns.includes(key)) // Фільтруємо зайві колонки
+                                .map((key) => {
+                                    const typedKey = key as keyof Order;
+                                    return (
+                                        <td key={key} className="px-1 py-1 text-[12px]">
+                                            {renderValue(order[typedKey])}
+                                        </td>
                                 );
                             })}
                         </tr>

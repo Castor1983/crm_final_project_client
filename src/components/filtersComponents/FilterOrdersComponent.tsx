@@ -129,11 +129,10 @@ const exportToExcel =  async () => {
             />
             <input
                 type="number"
-                style={{ appearance: "textfield" }}
                 placeholder="Age"
                 value={filters.age}
                 onChange={(e) => updateFilters({...filters, age: e.target.value})}
-                className="bg-gray-200 p-2 rounded focus:outline-none m-1 "
+                className="bg-gray-200 p-2 rounded appearance-none no-spinner focus:outline-none m-1 "
             />
             <select
                 value={filters.course}
