@@ -1,4 +1,4 @@
-import React, {FC, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {useSearchParams} from "react-router-dom";
 
 import {DescAscEnum} from "../../enums/desc-asc.enum.ts";
@@ -17,12 +17,13 @@ type Props = {
 }
 const OrdersTableComponent: FC<Props> =({setIsModalOpen}) => {
     const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
-    const { setComments}= useCommentsStore();
+    const {setComments}= useCommentsStore();
     const {sortConfig, setSortConfig} = useSortConfigStore();
     const { orders} = useOrdersStore();
     const [, setSearchParams] = useSearchParams();
     const {setCurrentPage} = usePaginationStore();
     const excludedColumns = ["msg", "utm"];
+
 
 
     const handleExpandOrder = async (orderId: number| null) => {

@@ -1,31 +1,35 @@
-import {FC} from "react";
+import {FC, useState} from "react";
 import {useAuthStore} from "../../store/auth.ts";
-import axios from "axios";
 import {useCommentsStore} from "../../store/comments.ts";
 import {Order} from "../../interfaces/order.interface.ts";
 import {useOrdersStore} from "../../store/orders.ts";
 import {urls} from "../../common/urls.ts";
+import {apiAuth} from "../../services/api.ts";
 
 type Props = {
     setIsModalOpen: (open: boolean) => void
     order: Order
 }
 const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
-    const {manager, accessToken} = useAuthStore()
-
-    const {comments, comment, setComment} = useCommentsStore()
+    const {manager} = useAuthStore()
+    const {comments, comment, setComment} = useCommentsStore();
     const {setEditOrder}=useOrdersStore()
+    const [error, setError] = useState("");
+
 
     const handleSubmitComment = async (orderId: number) => {
+        if (!comment.trim()) {
+            setError("The field must not be empty");
+            return;
+        }
         try {
-            await axios.post(urls.orders.addComment(orderId), {
+            await apiAuth.post(urls.orders.addComment(orderId), {
                 body: comment,
-            }, {
-                headers: { Authorization: `Bearer ${accessToken}` },
             });
             setComment('');
+            setError("");
         } catch (error) {
-            console.error('Ошибка при отправке комментария:', error);
+            console.error('Ошибка при отправке комментария:', error);//todo
         }
     };
 
@@ -55,25 +59,32 @@ const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
                     )}
                 </div>
                 {(!order.manager || order.manager === manager?.surname) && (
-                    <div>
-                        <input
-                            type="text"
-                            value={comment}
-                            onChange={(e) => setComment(e.target.value)}
-                            placeholder="Comment"
-                            className=" p-2 w-full rounded-[5px] bg-gray-200 focus:outline-none"
-                        />
-                        <button
-                            onClick={() => {
-                                if (order.id) {
-                                    handleSubmitComment(order.id)
-                                }
-                            }}
-                            className="bg-[#43a047] text-white px-4 py-2 mt-2 rounded-[5px] hover:bg-green-700"
-                        >
-                            Submit
-                        </button>
-                        <div>
+                    <div className='flex-col'>
+                        <div className="flex flex-col relative">
+                            <input
+                                type="text"
+                                value={comment}
+                                onChange={(e) => {
+                                    setComment(e.target.value);
+                                    setError("");
+                                }}
+                                placeholder="Comment"
+                                className=" p-2 w-full rounded-[5px] bg-gray-200 focus:outline-none"
+                            />
+                            {error && <span className="text-red-500 text-sm mt-1">{error}</span>}
+                        </div>
+                        <div className="mt-6">
+                            <button
+                                onClick={() => {
+                                    if (order.id) {
+                                        handleSubmitComment(order.id)
+                                    }
+                                }}
+                                className="bg-[#43a047] text-white px-4 py-2 mt-2 rounded-[5px] hover:bg-green-700"
+                            >
+                                Submit
+                            </button>
+
                             <button
                                 onClick={() => handleOpenModal(order)}
                                 className="bg-[#43a047] text-white px-4 py-2 mt-2 rounded-[5px] hover:bg-green-700"
@@ -87,6 +98,6 @@ const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
             </td>
         </tr>
 
-    )
-}
-export default ExpandedOrderComponent;
+                    )
+                }
+                export default ExpandedOrderComponent;

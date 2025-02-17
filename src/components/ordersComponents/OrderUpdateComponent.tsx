@@ -14,7 +14,7 @@ type Props = {
     setIsModalOpen: (open: boolean) => void
 }
 const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
-const {editOrder, setEditOrder} = useOrdersStore()
+    const {editOrder, setEditOrder} = useOrdersStore()
     const {groups, setGroups, newGroup, setNewGroup}=useGroupsStore()
     const [isAddingGroup, setIsAddingGroup] = useState(false);
     useEffect(() => {
@@ -57,11 +57,13 @@ const {editOrder, setEditOrder} = useOrdersStore()
     const handleUpdateOrder = async () => {
         if (!editOrder) return;
 const orderId = editOrder.id?.toString()
-        const {course, sum, name, age, course_format, course_type, phone, group, alreadyPaid, status, surname, email} = editOrder
+        const updatedOrder = Object.fromEntries(
+            Object.entries(editOrder).map(([key, value]) => [key, value === "" ? null : value])
+        );
         try {
             await apiAuth.patch(
                 urls.orders.editOrder(orderId),
-                {course, sum, name, age, course_format, course_type, phone, group, alreadyPaid, status, surname, email},
+               updatedOrder,
             );
             alert("Замовлення оновлено успішно!"); //TODO
             setIsModalOpen(false);
@@ -115,7 +117,7 @@ const orderId = editOrder.id?.toString()
                     )}
                 </div>
 
-                <div className="flex flex-col"> //TODO validation
+                <div className="flex flex-col"> //TODO
                     <label>Status:</label>
                     <select
                         value={editOrder?.status || ""}
@@ -150,7 +152,7 @@ const orderId = editOrder.id?.toString()
                         type="number"
                         value={editOrder?.sum || ""}
                         onChange={(e) => setEditOrder(editOrder ? {...editOrder, sum: Number(e.target.value)} : null)}
-                        className="bg-gray-200 p-2 rounded focus:outline-none"
+                        className="bg-gray-200 p-2 rounded appearance-none no-spinner focus:outline-none"
                     />
                 </div>
 
@@ -173,7 +175,7 @@ const orderId = editOrder.id?.toString()
                             ...editOrder,
                             alreadyPaid: Number(e.target.value)
                         } : null)}
-                        className="bg-gray-200 p-2 rounded focus:outline-none"
+                        className="bg-gray-200 p-2 rounded  appearance-none no-spinner focus:outline-none"
                     />
                 </div>
 
@@ -239,7 +241,7 @@ const orderId = editOrder.id?.toString()
                         type="number"
                         value={editOrder?.age || ""}
                         onChange={(e) => setEditOrder(editOrder ? {...editOrder, age: Number(e.target.value)} : null)}
-                        className="bg-gray-200 p-2 rounded focus:outline-none"
+                        className="bg-gray-200 p-2 rounded appearance-none no-spinner focus:outline-none"
                     />
                 </div>
 
