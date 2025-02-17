@@ -1,8 +1,6 @@
 import {FC, useEffect, useState} from "react";
-import axios from "axios";
 
 import {useOrdersStore} from "../../store/orders.ts";
-import {useAuthStore} from "../../store/auth.ts";
 import {usePaginationStore} from "../../store/pagination.ts";
 import PaginationComponent from "../paginationComponents/PaginationCOmponent.tsx";
 import {useSearchParams} from "react-router-dom";
@@ -10,6 +8,8 @@ import {useSortConfigStore} from "../../store/sortConfig.ts";
 import OrderUpdateComponent from "./OrderUpdateComponent.tsx";
 import {useCommentsStore} from "../../store/comments.ts";
 import OrdersTableComponent from "./OrdersTableComponent.tsx";
+import {apiAuth} from "../../services/api.ts";
+import {ordersUrl} from "../../common/urls.ts";
 
 const OrdersComponent: FC = () => {
     const {setOrders } = useOrdersStore();
@@ -17,7 +17,6 @@ const OrdersComponent: FC = () => {
     const {comments}= useCommentsStore()
     const [searchParams, setSearchParams] = useSearchParams();
     const {sortConfig} = useSortConfigStore();
-    const accessToken = useAuthStore.getState().accessToken
     const { currentPage, setCurrentPage, setTotalPages } = usePaginationStore();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const {editOrder}=useOrdersStore()
@@ -34,17 +33,14 @@ const OrdersComponent: FC = () => {
                     params.sort = sortConfig.column;
                     params.order = sortConfig.direction;
                 }
-                const response = await axios.get('http://localhost:3001/api/orders', {//TODO
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                    params: params,
+                const response = await apiAuth.get(ordersUrl, {
+                    params
                 });
                 setOrders(response.data.data);
                 setTotalPages(response.data.total_pages);
 
             } catch (error) {
-                console.error('Ошибка при загрузке заявок:', error);
+                console.error('Ошибка при загрузке заявок:', error);//TODO
 
             } finally {
                 setLoading(false);
@@ -63,7 +59,7 @@ const OrdersComponent: FC = () => {
     };
 
     if (loading) {
-        return <div>loading...</div>;
+        return <div>loading...</div>;//todo
     }
     return (
         <div className="flex flex-col items-center">

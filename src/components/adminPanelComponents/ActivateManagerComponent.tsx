@@ -1,7 +1,7 @@
 import {FC, useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
-import axios from "axios";
 import {urls} from "../../common/urls.ts";
+import {api} from "../../services/api.ts";
 
 const ActivateManagerComponent: FC = () => {
     const { activateToken } = useParams();
@@ -19,7 +19,7 @@ const ActivateManagerComponent: FC = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(e.preventDefault())
+        console.log(e.preventDefault()) //todo
 
         if (password !== confirmPassword) {
             setMessage("Passwords don't match.");
@@ -27,14 +27,14 @@ const ActivateManagerComponent: FC = () => {
         }
 
         try {
-             await axios.post(urls.managers.activatePassword(activateToken), {
-                password: password, confirmPassword: confirmPassword
+             await api.post(urls.managers.activatePassword(activateToken), {
+                password: password
             });
 
             setMessage("Password is successfully set!");
             setTimeout(() => navigate("/"), 2000)
         } catch (error) {
-            setMessage("Error activation: " + (error.response?.data?.message || error.message));
+            setMessage("Error activation: " + (error.response?.data?.message || error.message));//todo
         }
     };
 

@@ -1,7 +1,7 @@
-const BaseUrl = 'http://localhost:3001/api';
-const authUrl =`${BaseUrl}/auth`;
-export const managersUrl = `${BaseUrl}/managers`;
-export const ordersUrl = `${BaseUrl}/orders`;
+export const baseUrl = 'http://localhost:3001/api';
+const authUrl ='/auth';
+export const managersUrl = '/managers';
+export const ordersUrl = '/orders';
 const signIn = '/sign-in';
 const signOut = '/sign-out';
 const refresh = '/refresh';
@@ -33,7 +33,7 @@ export const urls = {
 orders: {
         exportToExcel: `${ordersUrl}${exportToExcel}`,
         groups: `${ordersUrl}${groups}`,
-        orderById: (orderId: number) => `${ordersUrl}/${orderId}`,
+        orderById: (orderId: number | null) => `${ordersUrl}/${orderId}`,
         addComment: (orderId: number) => `${ordersUrl}${addComment}/${orderId}`,
         editOrder: (orderId: string | undefined) => `${ordersUrl}${edit}/${orderId}`,
 }

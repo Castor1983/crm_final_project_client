@@ -11,17 +11,15 @@ import {CourseTypeEnum} from "../../enums/courseType.enum.ts";
 import {StatusEnum} from "../../enums/status.enum.ts";
 import {useGroupsStore} from "../../store/groups.ts";
 import { RiResetRightFill} from "react-icons/ri";
-import {useAuthStore} from "../../store/auth.ts";
-import axios from "axios";
 import {COLUMNS_NAME} from "../../common/constants.ts";
 import {Order} from "../../interfaces/order.interface.ts";
 import {urls} from "../../common/urls.ts";
+import {apiAuth} from "../../services/api.ts";
 
 
 const FilterOrdersComponent: FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const {groups, setGroups} = useGroupsStore();
-    const {accessToken} = useAuthStore();
     const [filters, setFilters] = useState({
         name: searchParams.get("name") || "",
         surname: searchParams.get("surname") || "",
@@ -41,13 +39,9 @@ const FilterOrdersComponent: FC = () => {
     }, []);
     const fetchGroups = async () => {
         try {
-            const response = await axios.get(urls.orders.groups, {//TODO
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                }
-            });
+            const response = await apiAuth.get(urls.orders.groups);
             setGroups(response.data);
-        } catch (error) {
+        } catch (error) {//todo
             console.error("Помилка при отриманні груп:", error);
         }
     }
@@ -59,13 +53,13 @@ const FilterOrdersComponent: FC = () => {
                 const filteredParams = Object.fromEntries(
                     Object.entries(newFilters).filter(([_, value]) => value !== "" && value !== false)
                 );
-                setSearchParams(filteredParams);
+                setSearchParams(filteredParams);//todo
             }, 500),
         [setSearchParams]
     );
 
     const updateFilters = useCallback(
-        (newFilters) => {
+        (newFilters) => {//todo
             setFilters((prevFilters) => ({ ...prevFilters, ...newFilters }));
             debouncedUpdateFilters(newFilters);
         },
@@ -76,14 +70,10 @@ const exportToExcel =  async () => {
             ...Object.fromEntries(searchParams.entries())
         };
 
-        const response = await axios.get(urls.orders.exportToExcel, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
+        const response = await apiAuth.get(urls.orders.exportToExcel, {
             params: params,
         });
     const orders: Order[] = response.data.data
-    console.log(orders)
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet('Orders');
 
@@ -99,7 +89,10 @@ const exportToExcel =  async () => {
 
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-    saveAs(blob, "orders.xlsx");
+    const now = new Date();
+    const formattedDate = `${now.getMonth() + 1}.${now.getDate()}.${now.getFullYear()}`;
+    const fileName = `${formattedDate}.xlsx`;
+    saveAs(blob, fileName);
 
     }
 

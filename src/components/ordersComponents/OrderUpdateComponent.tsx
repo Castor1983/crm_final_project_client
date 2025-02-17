@@ -6,9 +6,8 @@ import {CourseTypeEnum} from "../../enums/courseType.enum.ts";
 import Modal from "react-modal";
 import {useOrdersStore} from "../../store/orders.ts";
 import {useGroupsStore} from "../../store/groups.ts";
-import axios from "axios";
-import {useAuthStore} from "../../store/auth.ts";
 import {urls} from "../../common/urls.ts";
+import {apiAuth} from "../../services/api.ts";
 
 type Props = {
     isModalOpen: boolean
@@ -17,18 +16,15 @@ type Props = {
 const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
 const {editOrder, setEditOrder} = useOrdersStore()
     const {groups, setGroups, newGroup, setNewGroup}=useGroupsStore()
-    const accessToken = useAuthStore.getState().accessToken
     const [isAddingGroup, setIsAddingGroup] = useState(false);
     useEffect(() => {
         const fetchGroups = async () => {
             try {
-                const response = await axios.get(urls.orders.groups, {//TODO
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    }});
+                const response = await apiAuth.get(urls.orders.groups)
+
                 setGroups(response.data);
             } catch (error) {
-                console.error("Помилка при отриманні груп:", error);
+                console.error("Помилка при отриманні груп:", error);//TODO
             }
         };
         if (isModalOpen) {
@@ -42,18 +38,15 @@ const {editOrder, setEditOrder} = useOrdersStore()
             return;
         }
         try {
-            const response = await axios.post(
-                urls.orders.groups, //TODO
+            const response = await apiAuth.post(
+                urls.orders.groups,
                 { name: newGroup },
-                {
-                    headers: { Authorization: `Bearer ${accessToken}` }
-                }
             );
             setGroups([...groups, response.data]);
             setEditOrder(editOrder && { ...editOrder, group: response.data.name });
             setNewGroup("");
         } catch (error) {
-            console.error("Помилка при додаванні групи:", error);
+            console.error("Помилка при додаванні групи:", error);//TODO
         }
     };
 
@@ -66,18 +59,15 @@ const {editOrder, setEditOrder} = useOrdersStore()
 const orderId = editOrder.id?.toString()
         const {course, sum, name, age, course_format, course_type, phone, group, alreadyPaid, status, surname, email} = editOrder
         try {
-            await axios.patch(
+            await apiAuth.patch(
                 urls.orders.editOrder(orderId),
                 {course, sum, name, age, course_format, course_type, phone, group, alreadyPaid, status, surname, email},
-                {
-                    headers: { Authorization: `Bearer ${accessToken}` }
-                }
             );
             alert("Замовлення оновлено успішно!"); //TODO
             setIsModalOpen(false);
         } catch (error) {
             console.error("Помилка при оновленні замовлення:", error);
-            alert("Не вдалося оновити замовлення!");
+            alert("Не вдалося оновити замовлення!"); // todo
         }
     };
 

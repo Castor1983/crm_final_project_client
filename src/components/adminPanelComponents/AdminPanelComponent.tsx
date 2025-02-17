@@ -1,13 +1,12 @@
 import {FC, useEffect, useState} from "react";
-import axios from "axios";
-import {useAuthStore} from "../../store/auth.ts";
+
 import {useManagersStore} from "../../store/managers.ts";
 import ManagerComponent from "./ManagerComponent.tsx";
 import CreateManagerWindow from "./CreateManagerWindow.tsx";
 import {managersUrl} from "../../common/urls.ts";
+import {apiAuth} from "../../services/api.ts";
 
 const AdminPanelComponent: FC =() => {
-    const {accessToken} = useAuthStore()
     const { stats, setStats, managers, setManagers} = useManagersStore()
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -16,17 +15,13 @@ const AdminPanelComponent: FC =() => {
     const fetchData = async () => {
         try {
             const  managersResponse = await
-                axios.get(managersUrl, {//TODO
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                    },
-                } );
+                apiAuth.get(managersUrl);
 
             setStats(managersResponse.data.orderStats);
             setManagers(managersResponse.data.data);
         } catch (err) {
             console.error("Error fetching data:", err);
-            setError("Failed to load data");
+            setError("Failed to load data");//TODO
         } finally {
             setLoading(false);
         }

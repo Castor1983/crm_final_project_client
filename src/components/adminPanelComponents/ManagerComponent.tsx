@@ -1,8 +1,8 @@
 import {FC, useState} from "react";
+
 import {ManagerInterface} from "../../interfaces/manager.interface.ts";
-import axios from "axios";
-import {useAuthStore} from "../../store/auth.ts";
 import {urls} from "../../common/urls.ts";
+import {apiAuth} from "../../services/api.ts";
 
 type Props = {
     manager: ManagerInterface
@@ -10,28 +10,19 @@ type Props = {
 }
 
 const ManagerComponent: FC<Props> = ({manager, onUpdate}) => {
-    const accessToken = useAuthStore().accessToken
     const [activationLink, setActivationLink] = useState("");
     const [ban, setBan] = useState<boolean>(manager.is_banned)
     const [buttonText, setButtonText] = useState(manager.is_active ? "RECOVERY PASSWORD" : "ACTIVATE");
 
     const handleActivate = async () => {
-        const response = await axios.post(urls.managers.activateManager(manager.id),
-            {},
-            {
-            headers: { Authorization: `Bearer ${accessToken}` }
-        }
-        )
+        const response = await apiAuth.post(urls.managers.activateManager(manager.id),//todo
+            )
         setActivationLink(response.data.activationLink);
         setButtonText("COPY TO CLIPBOARD");
     }
 
     const handleRecovery = async () => {
-        const response = await axios.post(urls.managers.deactivate(manager.id),
-            {},
-            {
-                headers: { Authorization: `Bearer ${accessToken}` }
-            }
+        const response = await apiAuth.post(urls.managers.deactivate(manager.id),//todo
         )
         setActivationLink(response.data.activationLink);
         setButtonText("COPY TO CLIPBOARD");
@@ -47,29 +38,23 @@ const ManagerComponent: FC<Props> = ({manager, onUpdate}) => {
     };
     const handleBan = async () => {
         try {
-            await axios.patch(urls.managers.ban(manager.id),
-                {},
-                { headers: { Authorization: `Bearer ${accessToken}` } }
-            );
+            await apiAuth.patch(urls.managers.ban(manager.id),);
             setBan(true);
             setButtonText("ACTIVATE")
             onUpdate();
         } catch (error) {
-            console.error("Ban error:", error);
+            console.error("Ban error:", error);//todo
         }
     };
 
     const handleUnban = async () => {
         try {
-            await axios.patch(urls.managers.unban(manager.id),
-                {},
-                { headers: { Authorization: `Bearer ${accessToken}` } }
-            );
+            await apiAuth.patch(urls.managers.unban(manager.id));
             setBan(false);
             onUpdate();
             setButtonText("RECOVERY PASSWORD")
         } catch (error) {
-            console.error("Unban error:", error);
+            console.error("Unban error:", error);//todo
         }
     };
 

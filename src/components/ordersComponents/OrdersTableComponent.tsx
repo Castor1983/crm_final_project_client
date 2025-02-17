@@ -1,21 +1,21 @@
 import React, {FC, useState} from "react";
+import {useSearchParams} from "react-router-dom";
+
 import {DescAscEnum} from "../../enums/desc-asc.enum.ts";
 import {Order} from "../../interfaces/order.interface.ts";
 import ExpandedOrderComponent from "./ExpandedOrderComponent.tsx";
-import axios from "axios";
-import {useAuthStore} from "../../store/auth.ts";
 import {useCommentsStore} from "../../store/comments.ts";
 import {useSortConfigStore} from "../../store/sortConfig.ts";
 import {useOrdersStore} from "../../store/orders.ts";
-import {useSearchParams} from "react-router-dom";
 import {usePaginationStore} from "../../store/pagination.ts";
+import {apiAuth} from "../../services/api.ts";
+import {urls} from "../../common/urls.ts";
 
 type Props = {
     setIsModalOpen: (open: boolean) => void
 }
 const OrdersTableComponent: FC<Props> =({setIsModalOpen}) => {
     const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
-    const accessToken = useAuthStore.getState().accessToken;
     const { setComments}= useCommentsStore();
     const {sortConfig, setSortConfig} = useSortConfigStore();
     const { orders} = useOrdersStore();
@@ -25,11 +25,7 @@ const OrdersTableComponent: FC<Props> =({setIsModalOpen}) => {
 
     const handleExpandOrder = async (orderId: number| null) => {
         setExpandedOrderId(orderId === expandedOrderId ? null : orderId);
-        const response = await axios.get(`http://localhost:3001/api/orders/${orderId}`, { //TODO
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            }, })
-
+        const response = await apiAuth.get(urls.orders.orderById(orderId))// todo
         setComments(response.data.comments)
     };
     const renderValue = (value: string | number | Date | null) => {

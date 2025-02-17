@@ -1,7 +1,6 @@
 export const COLUMNS_NAME ={
     orderColumnsName: ['id', 'name', 'surname', 'email', 'phone', 'age', 'course', 'course_format', 'course_type', 'status', 'sum', 'alreadyPaid',
     'created_at', 'utm', 'msg'],
-    orderSearchTitle: ['name', 'surname', 'email', 'phone', 'age' ],
     orderExcelColumns: [
         { header: 'ID', key: 'id', width: 10 },
         { header: 'Name', key: 'name', width: 20 },
@@ -22,14 +21,4 @@ export const COLUMNS_NAME ={
         { header: 'Group', key: 'group', width: 15 },
         { header: 'Manager', key: 'manager', width: 15 },
     ],
-    statsColumnsRequest: [
-        'COUNT(order.id) AS total',
-        `SUM(CASE WHEN order.status = :inWork THEN 1 ELSE 0 END) AS in_work`,
-        `SUM(CASE WHEN order.status = :new THEN 1 ELSE 0 END) AS new`,
-        'SUM(CASE WHEN order.status = :agree THEN 1 ELSE 0 END) AS agree',
-        'SUM(CASE WHEN order.status = :disagree THEN 1 ELSE 0 END) AS disagree',
-        'SUM(CASE WHEN order.status = :dubbing THEN 1 ELSE 0 END) AS dubbing',
-        'SUM(CASE WHEN order.status IS NULL THEN 1 ELSE 0 END) AS null_count'
-    ]
 }
-export const DESC_ASC = ['DESC', 'ASC']

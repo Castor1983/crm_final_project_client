@@ -1,10 +1,11 @@
 import React, {FC} from "react";
 import Modal from "react-modal";
+
 import {useManagersStore} from "../../store/managers.ts";
-import {ManagerInterface} from "../../interfaces/manager.interface.ts";
-import axios from "axios";
 import {useAuthStore} from "../../store/auth.ts";
+import {ManagerInterface} from "../../interfaces/manager.interface.ts";
 import {managersUrl} from "../../common/urls.ts";
+import {apiAuth} from "../../services/api.ts";
 
 type Props = {
     isOpen: boolean,
@@ -21,9 +22,7 @@ const {manager, setManager} = useManagersStore()
     };
 
     const handleCreate = async () => {
-        await axios.post( managersUrl, manager,  {
-            headers: { Authorization: `Bearer ${accessToken}` }
-        })
+        await apiAuth.post( managersUrl, manager)
 
         setIsOpen(false);
         setManager({} as ManagerInterface)
