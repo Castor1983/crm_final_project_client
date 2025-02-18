@@ -8,6 +8,7 @@ import {useOrdersStore} from "../../store/orders.ts";
 import {useGroupsStore} from "../../store/groups.ts";
 import {urls} from "../../common/urls.ts";
 import {apiAuth} from "../../services/api.ts";
+import {editOrderSchema} from "../../validators/orderValidators.ts";
 
 type Props = {
     isModalOpen: boolean
@@ -17,6 +18,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
     const {editOrder, setEditOrder} = useOrdersStore()
     const {groups, setGroups, newGroup, setNewGroup}=useGroupsStore()
     const [isAddingGroup, setIsAddingGroup] = useState(false);
+    const [validationErrors, setValidationErrors] = useState<Record<string, string>>({})
     useEffect(() => {
         const fetchGroups = async () => {
             try {
@@ -59,7 +61,6 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
         if (!editOrder) return;
 
 const orderId = editOrder.id?.toString()
-
         const updatedOrder = Object.fromEntries(
             Object.entries(editOrder).map(([key, value]) => [
                 key,
@@ -70,6 +71,19 @@ const orderId = editOrder.id?.toString()
                         : value,
             ])
         );
+        const {name, age, alreadyPaid, email, surname, sum, phone} = updatedOrder
+        const { error } = editOrderSchema.validate({ name, age, alreadyPaid, email, surname, sum, phone }, { abortEarly: false });
+
+        if (error) {
+            const errors: Record<string, string> = error.details.reduce((acc: Record<string, string>, err) => {
+                acc[err.path[0]] = err.message;
+                return acc;
+            }, {});
+
+            setValidationErrors(errors);
+            return;
+        }
+        setValidationErrors({});
         try {
             await apiAuth.patch(
                 urls.orders.editOrder(orderId),
@@ -154,6 +168,7 @@ const orderId = editOrder.id?.toString()
                         onChange={(e) => setEditOrder(editOrder ? {...editOrder, name: e.target.value} : null)}
                         className="bg-gray-200 p-2 rounded focus:outline-none"
                     />
+                    {validationErrors.name && <span className="text-red-500">{validationErrors.name}</span>}
                 </div>
 
                 <div className="flex flex-col">
@@ -167,6 +182,7 @@ const orderId = editOrder.id?.toString()
                         }}
                         className="bg-gray-200 p-2 rounded appearance-none no-spinner focus:outline-none"
                     />
+                    {validationErrors.sum && <span className="text-red-500">{validationErrors.sum}</span>}
                 </div>
 
                 <div className="flex flex-col">
@@ -177,6 +193,7 @@ const orderId = editOrder.id?.toString()
                         onChange={(e) => setEditOrder(editOrder ? {...editOrder, surname: e.target.value} : null)}
                         className="bg-gray-200 p-2 rounded focus:outline-none"
                     />
+                    {validationErrors.surname && <span className="text-red-500">{validationErrors.surname}</span>}
                 </div>
 
                 <div className="flex flex-col">
@@ -190,6 +207,7 @@ const orderId = editOrder.id?.toString()
                         }}
                         className="bg-gray-200 p-2 rounded  appearance-none no-spinner focus:outline-none"
                     />
+                    {validationErrors.alreadyPaid && <span className="text-red-500">{validationErrors.alreadyPaid}</span>}
                 </div>
 
                 <div className="flex flex-col">
@@ -200,6 +218,7 @@ const orderId = editOrder.id?.toString()
                         onChange={(e) => setEditOrder(editOrder ? {...editOrder, email: e.target.value} : null)}
                         className="bg-gray-200 p-2 rounded focus:outline-none"
                     />
+                    {validationErrors.email && <span className="text-red-500">{validationErrors.email}</span>}
                 </div>
 
                 <div className="flex flex-col">
@@ -234,6 +253,7 @@ const orderId = editOrder.id?.toString()
                         }}
                         className="bg-gray-200 p-2 rounded focus:outline-none"
                     />
+                    {validationErrors.phone && <span className="text-red-500">{validationErrors.phone}</span>}
                 </div>
 
                 <div className="flex flex-col">
@@ -263,6 +283,7 @@ const orderId = editOrder.id?.toString()
                         }}
                         className="bg-gray-200 p-2 rounded appearance-none no-spinner focus:outline-none"
                     />
+                    {validationErrors.age && <span className="text-red-500">{validationErrors.age}</span>}
                 </div>
 
 
