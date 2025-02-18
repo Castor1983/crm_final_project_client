@@ -55,10 +55,20 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
         setIsModalOpen(false);
     };
     const handleUpdateOrder = async () => {
+
         if (!editOrder) return;
+
 const orderId = editOrder.id?.toString()
+
         const updatedOrder = Object.fromEntries(
-            Object.entries(editOrder).map(([key, value]) => [key, value === "" ? null : value])
+            Object.entries(editOrder).map(([key, value]) => [
+                key,
+                value === "" || value === null
+                    ? null
+                    : typeof value === "string" && !isNaN(Number(value)) && key !== "phone"
+                        ? Number(value)
+                        : value,
+            ])
         );
         try {
             await apiAuth.patch(
@@ -150,8 +160,11 @@ const orderId = editOrder.id?.toString()
                     <label>Sum:</label>
                     <input
                         type="number"
-                        value={editOrder?.sum || ""}
-                        onChange={(e) => setEditOrder(editOrder ? {...editOrder, sum: Number(e.target.value)} : null)}
+                        value={editOrder?.sum ?? ""}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            setEditOrder(editOrder ? { ...editOrder, sum: value === "" ? null : Number(value) } : null);
+                        }}
                         className="bg-gray-200 p-2 rounded appearance-none no-spinner focus:outline-none"
                     />
                 </div>
@@ -170,11 +183,11 @@ const orderId = editOrder.id?.toString()
                     <label>Already paid:</label>
                     <input
                         type="number"
-                        value={editOrder?.alreadyPaid || ""}
-                        onChange={(e) => setEditOrder(editOrder ? {
-                            ...editOrder,
-                            alreadyPaid: Number(e.target.value)
-                        } : null)}
+                        value={editOrder?.alreadyPaid ?? ""}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            setEditOrder(editOrder ? { ...editOrder, alreadyPaid: value === "" ? null : Number(value) } : null);
+                        }}
                         className="bg-gray-200 p-2 rounded  appearance-none no-spinner focus:outline-none"
                     />
                 </div>
@@ -214,7 +227,11 @@ const orderId = editOrder.id?.toString()
                     <input
                         type="text"
                         value={editOrder?.phone || ""}
-                        onChange={(e) => setEditOrder(editOrder ? {...editOrder, phone: e.target.value} : null)}
+
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            setEditOrder(editOrder ? {...editOrder, phone: value} : null)
+                        }}
                         className="bg-gray-200 p-2 rounded focus:outline-none"
                     />
                 </div>
@@ -239,8 +256,11 @@ const orderId = editOrder.id?.toString()
                     <label>Age:</label>
                     <input
                         type="number"
-                        value={editOrder?.age || ""}
-                        onChange={(e) => setEditOrder(editOrder ? {...editOrder, age: Number(e.target.value)} : null)}
+                        value={editOrder?.age ?? ""}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            setEditOrder(editOrder ? { ...editOrder, age: value === "" ? null : Number(value) } : null);
+                        }}
                         className="bg-gray-200 p-2 rounded appearance-none no-spinner focus:outline-none"
                     />
                 </div>
