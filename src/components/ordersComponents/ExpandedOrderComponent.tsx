@@ -12,7 +12,7 @@ type Props = {
 }
 const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
     const {manager} = useAuthStore()
-    const {comments, comment, setComment} = useCommentsStore();
+    const {comments, comment, setComment, setComments} = useCommentsStore();
     const {setEditOrder}=useOrdersStore()
     const [error, setError] = useState("");
 
@@ -27,7 +27,9 @@ const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
                 body: comment,
             });
             setComment('');
-            setError("");
+            setError('');
+            const response = await apiAuth.get(urls.orders.orderById(orderId))// todo
+            setComments(response.data.comments)
         } catch (error) {
             console.error('Ошибка при отправке комментария:', error);//todo
         }
@@ -45,7 +47,9 @@ const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
                 <div className="mt-4 p-2 border-t border-gray-300">
                     {comments && comments.length > 0 ? (
                         <ul className="space-y-2">
-                            {comments.map((comment, index) => (
+                            {[...comments]
+                                .sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime())
+                                .slice(0, 3).map((comment, index) => (
                                 <li key={index} className="p-2 bg-white rounded-md shadow-sm">
                                     <p className="text-sm text-gray-800">{comment.body}</p>
                                     <p className="text-xs text-gray-500">
@@ -99,5 +103,5 @@ const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
         </tr>
 
                     )
-                }
-                export default ExpandedOrderComponent;
+}
+export default ExpandedOrderComponent;

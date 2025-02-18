@@ -44,9 +44,13 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
                 urls.orders.groups,
                 { name: newGroup },
             );
-            setGroups([...groups, response.data]);
-            setEditOrder(editOrder && { ...editOrder, group: response.data.name });
+            const newGroups = [...groups, response.data];
+            setGroups(newGroups);
+
+            setEditOrder(editOrder ? { ...editOrder, group: response.data.name } : null);
+
             setNewGroup("");
+            setIsAddingGroup(false);
         } catch (error) {
             console.error("Помилка при додаванні групи:", error);//TODO
         }
