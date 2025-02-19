@@ -15,9 +15,13 @@ export const useAuthStore = create<AuthState>()( persist(
             set({ manager: decoded });
             set({accessToken})
         },
-        logout: () => set({ accessToken: null }),
+        logout: () => {
+            localStorage.removeItem('auth-storage');
+            set({accessToken: null, manager: null});
+        }
     }),
     {
         name: "auth-storage",
+        partialize: (state) => ({ accessToken: state.accessToken, manager: state.manager })
     }
 ));
