@@ -1,7 +1,8 @@
-import {FC, useEffect, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {urls} from "../../common/urls.ts";
 import {api} from "../../services/api.ts";
+import {AxiosError} from "axios";
 
 const ActivateManagerComponent: FC = () => {
     const { activateToken } = useParams();
@@ -17,9 +18,8 @@ const ActivateManagerComponent: FC = () => {
         }
     }, [activateToken]);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(e.preventDefault()) //todo
 
         if (password !== confirmPassword) {
             setMessage("Passwords don't match.");
@@ -34,7 +34,8 @@ const ActivateManagerComponent: FC = () => {
             setMessage("Password is successfully set!");
             setTimeout(() => navigate("/"), 2000)
         } catch (error) {
-            setMessage("Error activation: " + (error.response?.data?.message || error.message));//todo
+            const err = error as AxiosError
+            setMessage("Error activation: " + (err.message));
         }
     };
 

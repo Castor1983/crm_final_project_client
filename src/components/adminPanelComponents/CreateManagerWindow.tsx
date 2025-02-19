@@ -2,7 +2,6 @@ import React, {FC} from "react";
 import Modal from "react-modal";
 
 import {useManagersStore} from "../../store/managers.ts";
-import {useAuthStore} from "../../store/auth.ts";
 import {ManagerInterface} from "../../interfaces/manager.interface.ts";
 import {managersUrl} from "../../common/urls.ts";
 import {apiAuth} from "../../services/api.ts";
@@ -14,8 +13,6 @@ type Props = {
 
 const CreateManagerWindow: FC<Props> = ({isOpen, setIsOpen}) => {
 const {manager, setManager} = useManagersStore()
-    const {accessToken}= useAuthStore()
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
         setManager({ ...manager, [e.target.name]: e.target.value });

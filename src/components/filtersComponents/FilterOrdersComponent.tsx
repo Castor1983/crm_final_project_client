@@ -51,20 +51,23 @@ const FilterOrdersComponent: FC = () => {
         () =>
             debounce((newFilters) => {
                 const filteredParams = Object.fromEntries(
-                    Object.entries(newFilters).filter(([_, value]) => value !== "" && value !== false)
+                    Object.entries(newFilters)
+                        .filter(([, value]) => value !== "" && value !== false)
+                        .map(([key, value]) => [key, String(value)]) // Преобразуем в строки
                 );
-                setSearchParams(filteredParams);//todo
+                setSearchParams(filteredParams);
             }, 500),
         [setSearchParams]
     );
 
     const updateFilters = useCallback(
-        (newFilters) => {//todo
+        (newFilters: Record<string, string | boolean>) => {
             setFilters((prevFilters) => ({ ...prevFilters, ...newFilters }));
             debouncedUpdateFilters(newFilters);
         },
         [debouncedUpdateFilters]
     );
+
 const exportToExcel =  async () => {
         const params = {
             ...Object.fromEntries(searchParams.entries())

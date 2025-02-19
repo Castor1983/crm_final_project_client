@@ -1,10 +1,11 @@
 import React from "react";
-import { useForm } from "react-hook-form";
+import {useForm, UseFormRegister} from "react-hook-form";
+import {LoginForm} from "../../interfaces/loginForm.interface.ts";
 
 
 interface LoginFormProps {
     onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
-    register: ReturnType<typeof useForm>["register"];
+    register: UseFormRegister<LoginForm>;
     errors: ReturnType<typeof useForm>["formState"]["errors"];
 }
 

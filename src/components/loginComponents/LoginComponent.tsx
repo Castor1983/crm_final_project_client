@@ -7,6 +7,7 @@ import LoginFormComponent from "./LoginFormComponent.tsx";
 import {urls} from "../../common/urls.ts";
 import {api} from "../../services/api.ts";
 import {useForm} from "react-hook-form";
+import {AxiosError} from "axios";
 
 const LoginComponent: FC = () => {
     const login = useAuthStore((state) => state.login);
@@ -21,8 +22,9 @@ const LoginComponent: FC = () => {
                 login(response.data.tokens.accessToken);
                 navigate("/orders");
             }
-        } catch (error: any) {//todo
-            if (error.response && error.response.status === 401) {
+        } catch (error) {
+            const err = error as AxiosError
+            if (err.response && err.response.status === 401) {
                 setError("password", { type: "manual", message: "Wrong email or password" });
             }
         }
@@ -31,7 +33,7 @@ const LoginComponent: FC = () => {
     return (
         <div className="flex min-h-screen items-center justify-center ">
             <LoginFormComponent onSubmit={handleSubmit(onSubmit)}
-                                register={register} //todo
+                                register={register}
                                 errors={errors}  />
         </div>
     );
