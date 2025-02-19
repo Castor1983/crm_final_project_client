@@ -23,7 +23,7 @@ const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
             setComments(response.data.comments)
         }
         fetchComments()
-    }, []);
+    }, [comment]);
 
 
     const handleSubmitComment = async (orderId: number) => {
@@ -37,8 +37,6 @@ const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
             });
             setComment('');
             setError('');
-            const response = await apiAuth.get(urls.orders.orderById(orderId))// todo
-            setComments(response.data.comments)
         } catch (error) {
             console.error('Ошибка при отправке комментария:', error);//todo
         }
