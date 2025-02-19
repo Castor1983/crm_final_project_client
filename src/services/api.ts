@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import {baseUrl} from "../common/urls.ts";
+import useLoaderStore from "../store/loader.ts";
 
 export const api = axios.create({
     baseURL: baseUrl,
@@ -22,5 +23,22 @@ apiAuth.interceptors.request.use((config) => {
     if (accessToken) {
         config.headers.Authorization = `Bearer ${accessToken}`;
     }
+    useLoaderStore.getState().setLoading(true);
     return config;
-}, (error) => Promise.reject(error));
+}, (error) =>  {
+    useLoaderStore.getState().setLoading(false);
+    if (error.response && error.response.status === 401) {
+        window.location.href = '/login';
+    }
+    return Promise.reject(error);
+});
+apiAuth.interceptors.response.use(
+    (response) => {
+        useLoaderStore.getState().setLoading(false);
+        return response;
+    },
+    (error) => {
+        useLoaderStore.getState().setLoading(false);
+        return Promise.reject(error);
+    }
+);

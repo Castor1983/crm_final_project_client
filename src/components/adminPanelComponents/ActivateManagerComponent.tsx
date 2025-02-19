@@ -5,7 +5,7 @@ import {api} from "../../services/api.ts";
 import {AxiosError} from "axios";
 
 const ActivateManagerComponent: FC = () => {
-    const { activateToken } = useParams();
+        const { activateToken } = useParams();
     const navigate = useNavigate();
 
     const [password, setPassword] = useState("");

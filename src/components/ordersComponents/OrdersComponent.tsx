@@ -13,7 +13,6 @@ import {ordersUrl} from "../../common/urls.ts";
 
 const OrdersComponent: FC = () => {
     const {setOrders } = useOrdersStore();
-    const [loading, setLoading] = useState<boolean>(true);
     const {comments}= useCommentsStore()
     const [searchParams, setSearchParams] = useSearchParams();
     const {sortConfig} = useSortConfigStore();
@@ -40,10 +39,8 @@ const OrdersComponent: FC = () => {
                 setTotalPages(response.data.total_pages);
 
             } catch (error) {
-                console.error('Ошибка при загрузке заявок:', error);//TODO
+                console.error('Ошибка при загрузке заявок:', error);
 
-            } finally {
-                setLoading(false);
             }
         };
         fetchOrders();
@@ -58,9 +55,6 @@ const OrdersComponent: FC = () => {
         });
     };
 
-    if (loading) {
-        return <div>loading...</div>;//todo
-    }
     return (
         <div className="flex flex-col items-center">
             <OrdersTableComponent setIsModalOpen={setIsModalOpen}/>
