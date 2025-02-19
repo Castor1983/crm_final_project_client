@@ -6,14 +6,12 @@ import PaginationComponent from "../paginationComponents/PaginationCOmponent.tsx
 import {useSearchParams} from "react-router-dom";
 import {useSortConfigStore} from "../../store/sortConfig.ts";
 import OrderUpdateComponent from "./OrderUpdateComponent.tsx";
-import {useCommentsStore} from "../../store/comments.ts";
 import OrdersTableComponent from "./OrdersTableComponent.tsx";
 import {apiAuth} from "../../services/api.ts";
 import {ordersUrl} from "../../common/urls.ts";
 
 const OrdersComponent: FC = () => {
     const {setOrders } = useOrdersStore();
-    const {comments}= useCommentsStore()
     const [searchParams, setSearchParams] = useSearchParams();
     const {sortConfig} = useSortConfigStore();
     const { currentPage, setCurrentPage, setTotalPages } = usePaginationStore();
@@ -44,7 +42,7 @@ const OrdersComponent: FC = () => {
             }
         };
         fetchOrders();
-    }, [searchParams, sortConfig, currentPage, comments, editOrder]);
+    }, [searchParams, sortConfig, currentPage, editOrder]);
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);

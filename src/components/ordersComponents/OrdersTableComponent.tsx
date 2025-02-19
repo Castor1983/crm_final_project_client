@@ -4,20 +4,18 @@ import {useSearchParams} from "react-router-dom";
 import {DescAscEnum} from "../../enums/desc-asc.enum.ts";
 import {Order} from "../../interfaces/order.interface.ts";
 import ExpandedOrderComponent from "./ExpandedOrderComponent.tsx";
-import {useCommentsStore} from "../../store/comments.ts";
+
 import {useSortConfigStore} from "../../store/sortConfig.ts";
 import {useOrdersStore} from "../../store/orders.ts";
 import {usePaginationStore} from "../../store/pagination.ts";
-import {apiAuth} from "../../services/api.ts";
-import {urls} from "../../common/urls.ts";
+
 import {COLUMNS_NAME} from "../../common/constants.ts";
 
 type Props = {
     setIsModalOpen: (open: boolean) => void
 }
 const OrdersTableComponent: FC<Props> =({setIsModalOpen}) => {
-    const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
-    const {setComments}= useCommentsStore();
+    const [expandedOrders, setExpandedOrders] = useState<Set<number>>(new Set());
     const {sortConfig, setSortConfig} = useSortConfigStore();
     const { orders} = useOrdersStore();
     const [, setSearchParams] = useSearchParams();
@@ -26,14 +24,25 @@ const OrdersTableComponent: FC<Props> =({setIsModalOpen}) => {
 
 
 
-    const handleExpandOrder = async (orderId: number| null) => {
-        setExpandedOrderId(orderId === expandedOrderId ? null : orderId);
-        const response = await apiAuth.get(urls.orders.orderById(orderId))// todo
-        setComments(response.data.comments)
+    const handleExpandOrder = async (orderId: number) => {
+        setExpandedOrders((prev) => {
+            const newExpanded = new Set(prev);
+            if (newExpanded.has(orderId)) {
+                newExpanded.delete(orderId);
+            } else {
+                newExpanded.add(orderId);
+            }
+            return newExpanded;
+        });
+
     };
-    const renderValue = (value: string | number | Date | null) => {
-        if (value instanceof Date) {
-            return value.toLocaleDateString();
+    const renderValue = (value: string | number | null, ) => {
+        if (typeof value === "string" && value.includes("T")) {
+            return new Date(value).toLocaleDateString("uk-UA", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+            });
         }
 
         return value ?? "null";
@@ -79,7 +88,7 @@ const OrdersTableComponent: FC<Props> =({setIsModalOpen}) => {
                                 className={`hover:bg-[#43a047] cursor-pointer ${index % 2 === 0 ? 'bg-white' : 'bg-gray-100'}`}
                         >
                             {Object.keys(order)
-                                .filter((key) => !excludedColumns.includes(key)) // Фільтруємо зайві колонки
+                                .filter((key) => !excludedColumns.includes(key))
                                 .map((key) => {
                                     const typedKey = key as keyof Order;
                                     return (
@@ -89,7 +98,7 @@ const OrdersTableComponent: FC<Props> =({setIsModalOpen}) => {
                                 );
                             })}
                         </tr>
-                        {expandedOrderId === order.id && (
+                        {expandedOrders.has(order.id) && (
                             <ExpandedOrderComponent order={order} setIsModalOpen={setIsModalOpen}/>
 
                         )}

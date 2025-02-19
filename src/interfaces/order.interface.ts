@@ -4,7 +4,7 @@ import {CourseTypeEnum} from "../enums/courseType.enum.ts";
 import {StatusEnum} from "../enums/status.enum.ts";
 
 export interface Order {
-    id: number| null;
+    id: number;
     name: string| null,
     surname: string| null,
     email: string| null,
@@ -18,7 +18,7 @@ export interface Order {
     alreadyPaid: number| null,
     utm: string| null,
     msg: string| null,
-    created_at: Date| null,
+    created_at: string | null,
     group: string| null,
     manager: string| null,
 

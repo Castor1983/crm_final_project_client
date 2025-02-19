@@ -1,10 +1,10 @@
-import {FC, useState} from "react";
+import {FC, useEffect, useState} from "react";
 import {useAuthStore} from "../../store/auth.ts";
-import {useCommentsStore} from "../../store/comments.ts";
 import {Order} from "../../interfaces/order.interface.ts";
 import {useOrdersStore} from "../../store/orders.ts";
 import {urls} from "../../common/urls.ts";
 import {apiAuth} from "../../services/api.ts";
+import {CommentInterface} from "../../interfaces/comment.interface.ts";
 
 type Props = {
     setIsModalOpen: (open: boolean) => void
@@ -12,9 +12,18 @@ type Props = {
 }
 const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
     const {manager} = useAuthStore()
-    const {comments, comment, setComment, setComments} = useCommentsStore();
+    const [comments,  setComments] = useState<CommentInterface[]>([]);
+    const [comment, setComment] = useState('');
     const {setEditOrder}=useOrdersStore()
     const [error, setError] = useState("");
+
+    useEffect(() => {
+        const fetchComments =  async () => {
+            const response = await apiAuth.get(urls.orders.orderById(order.id))// todo
+            setComments(response.data.comments)
+        }
+        fetchComments()
+    }, []);
 
 
     const handleSubmitComment = async (orderId: number) => {
