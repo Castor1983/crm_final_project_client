@@ -29,10 +29,8 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
                 console.error("Помилка при отриманні груп:", error);//TODO
             }
         };
-        if (isModalOpen) {
             fetchGroups();
-        }
-    }, [isModalOpen, isAddingGroup, groups]);
+    }, []);
     const handleAddGroup = async () => {
         if (!newGroup.trim()) return;
         if (groups.some(group => group.name === newGroup)) {
@@ -58,7 +56,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
 
     const handleCloseModal = () => {
         setEditOrder(null);
-        setIsModalOpen(false);
+        setTimeout(() => setIsModalOpen(false), 100);
     };
     const handleUpdateOrder = async () => {
 

@@ -42,7 +42,7 @@ const OrdersComponent: FC = () => {
             }
         };
         fetchOrders();
-    }, [searchParams, sortConfig, currentPage, editOrder]);
+    }, [searchParams, sortConfig, currentPage]);
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);

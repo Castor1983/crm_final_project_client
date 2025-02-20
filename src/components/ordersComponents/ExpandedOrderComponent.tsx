@@ -5,17 +5,21 @@ import {useOrdersStore} from "../../store/orders.ts";
 import {urls} from "../../common/urls.ts";
 import {apiAuth} from "../../services/api.ts";
 import {CommentInterface} from "../../interfaces/comment.interface.ts";
+import CommentsModalComponent from "./CommentsModalComponent.tsx";
 
 type Props = {
     setIsModalOpen: (open: boolean) => void
     order: Order
 }
+
 const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
     const {manager} = useAuthStore()
     const [comments,  setComments] = useState<CommentInterface[]>([]);
     const [comment, setComment] = useState('');
     const {setEditOrder}=useOrdersStore()
     const [error, setError] = useState("");
+    const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false);
+
 
     useEffect(() => {
         const fetchComments =  async () => {
@@ -51,7 +55,7 @@ const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
             <td colSpan={17} className="p-4 bg-gray-100">
                 <p><strong>Message:</strong> {order.msg || 'None'}</p>
                 <p><strong>UTM:</strong> {order.utm || 'None'}</p>
-                <div className="mt-4 p-2 border-t border-gray-300">
+                <div className="mt-4 p-2 border-t border-gray-300" onClick={() => setIsCommentsModalOpen(true)}>
                     {comments && comments.length > 0 ? (
                         <ul className="space-y-2">
                             {[...comments]
@@ -106,9 +110,12 @@ const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
 
                     </div>
                 )}
+                {isCommentsModalOpen && (
+                    <CommentsModalComponent comments={comments} onClose={() => setIsCommentsModalOpen(false)} />
+                )}
             </td>
         </tr>
 
-                    )
+    )
 }
 export default ExpandedOrderComponent;

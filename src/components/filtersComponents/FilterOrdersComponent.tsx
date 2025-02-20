@@ -32,6 +32,9 @@ const FilterOrdersComponent: FC = () => {
         status: searchParams.get("status") || StatusEnum.EMPTY,
         group: searchParams.get("group") || "",
         manager: searchParams.get("manager") === "true",
+        start_day: searchParams.get("start_day")|| "",
+        end_day: searchParams.get("end_day")|| "",
+
     });
 
     useEffect(() => {
@@ -100,7 +103,7 @@ const exportToExcel =  async () => {
     }
 
     return (
-        <div className="grid grid-cols-6 grid-rows-2">
+        <div className="grid grid-cols-7 grid-rows-2">
 
             <input
                 type="text"
@@ -194,7 +197,24 @@ const exportToExcel =  async () => {
                 ))}
             </select>
 
-            <div className="col-start-6 row-start-1 row-end-2 flex items-center">
+            <input
+                type="date"
+                value={filters.start_day}
+                onChange={(e) => updateFilters({...filters, start_day: e.target.value})}
+                min="2000-01-01"
+                max="2040-12-31"
+                className="bg-gray-200 p-2 rounded focus:outline-none m-1"
+            />
+            <input
+                type="date"
+                value={filters.end_day}
+                onChange={(e) => updateFilters({...filters, end_day: e.target.value})}
+                min="2000-01-01"
+                max="2040-12-31"
+                className="bg-gray-200 p-2 rounded focus:outline-none m-1"
+            />
+
+            <div className="col-start-7 row-start-1 row-end-2 flex items-center">
                 <label className="p-1">
                     <input
                         type="checkbox"
@@ -203,7 +223,21 @@ const exportToExcel =  async () => {
                     />
                     My
                 </label>
-                <button onClick={() => updateFilters({name: "", surname: "", email: "",  phone: "", age: "", course: CourseEnum.EMPTY, course_type: CourseTypeEnum.EMPTY, course_format: CourseFormatEnum.EMPTY, status: StatusEnum.EMPTY, group: "", manager: false})}
+                <button onClick={() => updateFilters({
+                    name: "",
+                    surname: "",
+                    email: "",
+                    phone: "",
+                    age: "",
+                    course: CourseEnum.EMPTY,
+                    course_type: CourseTypeEnum.EMPTY,
+                    course_format: CourseFormatEnum.EMPTY,
+                    status: StatusEnum.EMPTY,
+                    group: "",
+                    manager: false,
+                    start_day: "",
+                    end_day: ""
+                })}
                         className="bg-[#43a047] hover:bg-green-700 text-white m-1 p-2 rounded flex items-center gap-2">
                     <RiResetRightFill size={20}/>
 
