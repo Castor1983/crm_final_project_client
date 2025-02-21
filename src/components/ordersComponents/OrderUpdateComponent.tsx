@@ -112,7 +112,6 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
         }
         setValidationErrors({});
         try {
-            console.log(updatedOrder)
             await apiAuth.patch(
                 urls.orders.editOrder(orderId),
                updatedOrder,
