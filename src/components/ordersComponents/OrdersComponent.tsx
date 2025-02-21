@@ -11,12 +11,11 @@ import {apiAuth} from "../../services/api.ts";
 import {ordersUrl} from "../../common/urls.ts";
 
 const OrdersComponent: FC = () => {
-    const {setOrders } = useOrdersStore();
+    const {setOrders, editOrder} = useOrdersStore();
     const [searchParams, setSearchParams] = useSearchParams();
     const {sortConfig} = useSortConfigStore();
     const { currentPage, setCurrentPage, setTotalPages } = usePaginationStore();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const {editOrder}=useOrdersStore()
 
     useEffect(() => {
         const fetchOrders = async () => {

@@ -33,7 +33,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
             }
         };
             fetchGroups();
-    }, []);
+    }, [isAddingGroup]);
     useEffect(() => {
         if (editOrder) {
             setInitialOrder(editOrder);
@@ -56,7 +56,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
 
             setEditOrder(editOrder ? { ...editOrder, group: response.data.name } : null);
 
-            setNewGroup("");
+            setNewGroup('');
             setIsAddingGroup(false);
         } catch (error) {
             console.error("Помилка при додаванні групи:", error);//TODO
@@ -75,11 +75,11 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
             const typedKey = key as keyof Order;
 
             if (updatedOrder[typedKey] !== initialOrder[typedKey]) {
-                changes[typedKey] = updatedOrder[typedKey];
+                changes[typedKey] = updatedOrder[typedKey] ?? undefined;
             }
 
             return changes;
-        }, {} as Partial<Order>);
+        }, {} as Partial<Record<keyof Order, string | number | undefined>>);
     };
     const handleUpdateOrder = async () => {
 
