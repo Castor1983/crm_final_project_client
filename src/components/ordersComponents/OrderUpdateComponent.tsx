@@ -54,7 +54,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
             const newGroups = [...groups, response.data];
             setGroups(newGroups);
 
-            setEditOrder(editOrder ? { ...editOrder, group: response.data.name } : null);
+            setEditOrder(editOrder ? { ...editOrder, group: newGroup } : null);
 
             setNewGroup('');
             setIsAddingGroup(false);
@@ -99,7 +99,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
         );
 
         const {name, age, alreadyPaid, email, surname, sum, phone} = updatedOrder
-        const { error } = editOrderSchema.validate({ name, age, alreadyPaid, email, surname, sum, phone }, { abortEarly: false });
+        const { error } = editOrderSchema.validate({ name, age, alreadyPaid, email, surname, sum, phone}, { abortEarly: false });
 
         if (error) {
             const errors: Record<string, string> = error.details.reduce((acc: Record<string, string>, err) => {
@@ -132,7 +132,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
                     {!isAddingGroup ? (
                         <select
                             value={editOrder?.group || ""}
-                            onChange={(e) => setEditOrder(editOrder ? {...editOrder, group: e.target.value} : null)}
+                            onChange={(e) => setEditOrder(editOrder ? { ...editOrder, group: e.target.value } : null)}
                             className="bg-gray-200 p-2 rounded focus:outline-none"
                         >
                             <option value="">Select group</option>
@@ -140,6 +140,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
                                 <option key={index} value={group.name}>{group.name}</option>
                             ))}
                         </select>
+
                     ) : (
                         <input
                             type="text"
@@ -148,8 +149,9 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
                             className="bg-gray-200 p-2 rounded focus:outline-none"
                             placeholder="Group"
                         />
-                    )}
 
+                    )}
+                {validationErrors.group && <span className="text-red-500">{validationErrors.group}</span>}
                     {!isAddingGroup ? (
                         <button onClick={() => setIsAddingGroup(true)}
                                 className="mt-2 bg-[#43a047] text-white p-2 rounded hover:bg-green-700">

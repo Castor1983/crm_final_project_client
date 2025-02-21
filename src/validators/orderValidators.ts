@@ -25,6 +25,16 @@ export const editOrderSchema = Joi.object({
             'string.max': 'Surname must be at most 50 characters long',
         }),
 
+    group: Joi.alternatives().try(
+        Joi.string()
+            .min(4)
+            .max(20),)
+        .messages({
+            'string.base': 'group must be a string or empty',
+            'string.min': 'group must be at least 4 characters long',
+            'string.max': 'group must be at most 20 characters long',
+        }),
+
     email: Joi.alternatives().try(Joi.string()
         .pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/),
         Joi.valid(null))

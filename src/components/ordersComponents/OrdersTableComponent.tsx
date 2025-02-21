@@ -22,8 +22,6 @@ const OrdersTableComponent: FC<Props> =({setIsModalOpen}) => {
     const {setCurrentPage} = usePaginationStore();
     const excludedColumns = ["msg", "utm"];
 
-
-
     const handleExpandOrder = async (orderId: number) => {
         setExpandedOrders((prev) => {
             const newExpanded = new Set(prev);
