@@ -41,9 +41,18 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
     }, []);
 
     const handleAddGroup = async () => {
-        if (!newGroup.trim()) return;
+        if (newGroup.trim().length < 4) {
+            setValidationErrors((prev) => ({
+                ...prev,
+                group: "The group name must contain at least 4 characters",
+            }));
+            return;
+        }
         if (groups.some(group => group.name === newGroup)) {
-            alert("Група з такою назвою вже існує!"); //TODO
+            setValidationErrors((prev) => ({
+                ...prev,
+                group: "The group is already exist!",
+            }));
             return;
         }
         try {
@@ -58,8 +67,13 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
 
             setNewGroup('');
             setIsAddingGroup(false);
+            setValidationErrors((prev) => ({ ...prev, group: "" }));
         } catch (error) {
-            console.error("Помилка при додаванні групи:", error);//TODO
+            console.error("Помилка при додаванні групи:", error);
+            setValidationErrors((prev) => ({
+                ...prev,
+                group: "Не вдалося додати групу. Спробуйте ще раз.",
+            }));
         }
     };
 
