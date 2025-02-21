@@ -10,6 +10,8 @@ import {urls} from "../../common/urls.ts";
 import {apiAuth} from "../../services/api.ts";
 import {editOrderSchema} from "../../validators/orderValidators.ts";
 import {Order} from "../../interfaces/order.interface.ts";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 type Props = {
     isModalOpen: boolean
@@ -29,7 +31,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
 
                 setGroups(response.data);
             } catch (error) {
-                console.error("Помилка при отриманні груп:", error);//TODO
+                console.error("Error when removing a group:", error);
             }
         };
             fetchGroups();
@@ -69,10 +71,10 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
             setIsAddingGroup(false);
             setValidationErrors((prev) => ({ ...prev, group: "" }));
         } catch (error) {
-            console.error("Помилка при додаванні групи:", error);
+            console.error("the group adding is error. Try again.", error);
             setValidationErrors((prev) => ({
                 ...prev,
-                group: "Не вдалося додати групу. Спробуйте ще раз.",
+                group: "the group adding is error. Try again.",
             }));
         }
     };
@@ -130,11 +132,10 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
                 urls.orders.editOrder(orderId),
                updatedOrder,
             );
-            alert("Замовлення оновлено успішно!"); //TODO
+            toast.success("The order has been updated successfully!", { autoClose: 3000 });
             setIsModalOpen(false);
         } catch (error) {
-            console.error("Помилка при оновленні замовлення:", error);
-            alert("Не вдалося оновити замовлення!"); // todo
+            console.error("Update order is error", error);
         }
     };
 

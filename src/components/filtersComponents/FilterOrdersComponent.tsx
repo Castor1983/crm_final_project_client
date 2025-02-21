@@ -44,8 +44,8 @@ const FilterOrdersComponent: FC = () => {
         try {
             const response = await apiAuth.get(urls.orders.groups);
             setGroups(response.data);
-        } catch (error) {//todo
-            console.error("Помилка при отриманні груп:", error);
+        } catch (error) {
+            console.error("Error when removing a group:", error);
         }
     }
 

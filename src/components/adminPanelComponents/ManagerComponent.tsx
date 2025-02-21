@@ -1,5 +1,6 @@
 import {FC, useState} from "react";
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {ManagerInterface} from "../../interfaces/manager.interface.ts";
 import {urls} from "../../common/urls.ts";
 import {apiAuth} from "../../services/api.ts";
@@ -15,17 +16,31 @@ const ManagerComponent: FC<Props> = ({manager, onUpdate}) => {
     const [buttonText, setButtonText] = useState(manager.is_active ? "RECOVERY PASSWORD" : "ACTIVATE");
 
     const handleActivate = async () => {
-        const response = await apiAuth.post(urls.managers.activateManager(manager.id),//todo
-            )
-        setActivationLink(response.data.activationLink);
-        setButtonText("COPY TO CLIPBOARD");
+       try{
+           const activateResponse = await apiAuth.post(urls.managers.activateManager(manager.id),
+           )
+           setActivationLink(activateResponse.data.activationLink);
+           setButtonText("COPY TO CLIPBOARD");
+       }catch (error){
+           console.error("Failed to get activation link", error)
+           toast.error('Failed to get activation link')
+       }
+
+
     }
 
     const handleRecovery = async () => {
-        const response = await apiAuth.post(urls.managers.deactivate(manager.id),//todo
-        )
-        setActivationLink(response.data.activationLink);
-        setButtonText("COPY TO CLIPBOARD");
+        try{
+            const recoveryResponse = await apiAuth.post(urls.managers.deactivate(manager.id),
+                )
+                setActivationLink(recoveryResponse.data.activationLink);
+                setButtonText("COPY TO CLIPBOARD");
+        }catch (error){
+            console.error("Failed to get activation link", error)
+            toast.error('Failed to get activation link')
+        }
+
+
     }
 
 
@@ -43,7 +58,8 @@ const ManagerComponent: FC<Props> = ({manager, onUpdate}) => {
             setButtonText("ACTIVATE")
             onUpdate();
         } catch (error) {
-            console.error("Ban error:", error);//todo
+            console.error("Ban error:", error);
+            toast.error('Ban error')
         }
     };
 
@@ -54,7 +70,8 @@ const ManagerComponent: FC<Props> = ({manager, onUpdate}) => {
             onUpdate();
             setButtonText("RECOVERY PASSWORD")
         } catch (error) {
-            console.error("Unban error:", error);//todo
+            console.error("Unban error:", error);
+            toast.error('Unban error')
         }
     };
 

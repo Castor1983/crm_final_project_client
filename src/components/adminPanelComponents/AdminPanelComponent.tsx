@@ -1,4 +1,6 @@
 import {FC, useEffect, useState} from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import {useManagersStore} from "../../store/managers.ts";
 import ManagerComponent from "./ManagerComponent.tsx";
@@ -8,11 +10,9 @@ import {apiAuth} from "../../services/api.ts";
 
 const AdminPanelComponent: FC =() => {
     const { stats, setStats, managers, setManagers} = useManagersStore()
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
     const [isOpen, setIsOpen] = useState(false);
 
-    const fetchData = async () => {
+    const fetchManagers = async () => {
         try {
             const  managersResponse = await
                 apiAuth.get(managersUrl);
@@ -20,18 +20,13 @@ const AdminPanelComponent: FC =() => {
             setStats(managersResponse.data.orderStats);
             setManagers(managersResponse.data.data);
         } catch (err) {
-            console.error("Error fetching data:", err);
-            setError("Failed to load data");//TODO
-        } finally {
-            setLoading(false);
+            console.error("Error fetching managers:", err);
+            toast.error("Failed to load managers", {autoClose: 3000});
         }
     };
     useEffect(() => {
-        fetchData();
+        fetchManagers();
     }, []);
-
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>{error}</p>;
 
     return (
         <div className="w-[100%] flex-auto pl-40 pr-40">
@@ -47,7 +42,7 @@ const AdminPanelComponent: FC =() => {
             </button>
             {managers.length > 0 ? (
                 managers.map((manager) => (
-                    <ManagerComponent key={manager.id} manager={manager} onUpdate={fetchData}/>
+                    <ManagerComponent key={manager.id} manager={manager} onUpdate={fetchManagers}/>
 
                 ))
             ) : (

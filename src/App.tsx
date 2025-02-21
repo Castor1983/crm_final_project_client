@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import {ReactNode} from "react";
 import Modal from "react-modal";
+import { ToastContainer } from "react-toastify";
 
 import { useAuthStore } from "./store/auth";
 import LoginPage from "./pages/auth/LoginPage.tsx";
@@ -22,6 +23,7 @@ const App = () => {
         <Router>
             <SessionManagerComponent/>
             <SessionWatcherComponent/>
+            <ToastContainer />
             <Routes>
                 <Route path="/" element={<Navigate to="/login" replace />} />
                 <Route path="/login" element={<LoginPage />} />

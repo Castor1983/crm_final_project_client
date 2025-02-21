@@ -23,8 +23,13 @@ const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
 
     useEffect(() => {
         const fetchComments =  async () => {
-            const response = await apiAuth.get(urls.orders.orderById(order.id))// todo
-            setComments(response.data.comments)
+            try {
+                const commentsResponse = await apiAuth.get(urls.orders.orderById(order.id))
+                setComments(commentsResponse.data.comments)
+            }catch (error){
+                console.error('Could not get comments')
+            }
+
         }
         fetchComments()
     }, [comment]);
@@ -42,7 +47,7 @@ const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
             setComment('');
             setError('');
         } catch (error) {
-            console.error('Ошибка при отправке комментария:', error);//todo
+            console.error('Error sending comment:', error);
         }
     };
 
