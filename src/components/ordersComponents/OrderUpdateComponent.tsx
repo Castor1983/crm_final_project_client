@@ -9,6 +9,7 @@ import {useGroupsStore} from "../../store/groups.ts";
 import {urls} from "../../common/urls.ts";
 import {apiAuth} from "../../services/api.ts";
 import {editOrderSchema} from "../../validators/orderValidators.ts";
+import {Order} from "../../interfaces/order.interface.ts";
 
 type Props = {
     isModalOpen: boolean
@@ -19,6 +20,8 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
     const {groups, setGroups, newGroup, setNewGroup}=useGroupsStore()
     const [isAddingGroup, setIsAddingGroup] = useState(false);
     const [validationErrors, setValidationErrors] = useState<Record<string, string>>({})
+    const [initialOrder, setInitialOrder] = useState<Order | null>(null);
+
     useEffect(() => {
         const fetchGroups = async () => {
             try {
@@ -31,6 +34,12 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
         };
             fetchGroups();
     }, []);
+    useEffect(() => {
+        if (editOrder) {
+            setInitialOrder(editOrder);
+        }
+    }, []);
+
     const handleAddGroup = async () => {
         if (!newGroup.trim()) return;
         if (groups.some(group => group.name === newGroup)) {
@@ -58,13 +67,28 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
         setEditOrder(null);
         setTimeout(() => setIsModalOpen(false), 100);
     };
+
+    const getUpdatedFields = (updatedOrder: Order, initialOrder: Order | null) => {
+        if (!initialOrder) return updatedOrder;
+
+        return Object.keys(updatedOrder).reduce((changes, key) => {
+            const typedKey = key as keyof Order;
+
+            if (updatedOrder[typedKey] !== initialOrder[typedKey]) {
+                changes[typedKey] = updatedOrder[typedKey];
+            }
+
+            return changes;
+        }, {} as Partial<Order>);
+    };
     const handleUpdateOrder = async () => {
 
-        if (!editOrder) return;
+        if (!editOrder || !initialOrder) return;
 
-const orderId = editOrder.id?.toString()
-        const updatedOrder = Object.fromEntries(
-            Object.entries(editOrder).map(([key, value]) => [
+    const orderId = editOrder.id?.toString();
+    const updatedFields = getUpdatedFields(editOrder, initialOrder);
+    const updatedOrder = Object.fromEntries(
+            Object.entries(updatedFields).map(([key, value]) => [
                 key,
                 value === "" || value === null
                     ? null
@@ -73,6 +97,7 @@ const orderId = editOrder.id?.toString()
                         : value,
             ])
         );
+
         const {name, age, alreadyPaid, email, surname, sum, phone} = updatedOrder
         const { error } = editOrderSchema.validate({ name, age, alreadyPaid, email, surname, sum, phone }, { abortEarly: false });
 
@@ -87,6 +112,7 @@ const orderId = editOrder.id?.toString()
         }
         setValidationErrors({});
         try {
+            console.log(updatedOrder)
             await apiAuth.patch(
                 urls.orders.editOrder(orderId),
                updatedOrder,
@@ -143,7 +169,7 @@ const orderId = editOrder.id?.toString()
                     )}
                 </div>
 
-                <div className="flex flex-col"> //TODO
+                <div className="flex flex-col">
                     <label>Status:</label>
                     <select
                         value={editOrder?.status || ""}
