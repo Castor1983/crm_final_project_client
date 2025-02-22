@@ -99,7 +99,14 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
     };
     const handleUpdateOrder = async () => {
 
-        if (!editOrder || !initialOrder) return;
+        if (!editOrder || !initialOrder ) return;
+        if(editOrder === initialOrder) {
+            toast.info('No changes were made', {autoClose: 1000})
+            setTimeout(()=> {
+                setIsModalOpen(false)
+            }, 2000)
+
+        }
 
     const orderId = editOrder.id?.toString();
     const updatedFields = getUpdatedFields(editOrder, initialOrder);
