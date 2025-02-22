@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/auth";
 import { FaUsersCog, FaSignOutAlt } from "react-icons/fa";
+import {buttonClass} from "../../styles/styles.ts";
 
 const HeaderComponent = () => {
     const navigate = useNavigate();
@@ -14,16 +15,14 @@ const HeaderComponent = () => {
                     <div className="flex items-center gap-2">
                         <h2 className="text-white text-xl font-bold">admin</h2>
                         <button
-                            onClick={() => navigate("/adminPanel")}
-                            className="bg-[#43a047] hover:bg-green-700 text-white p-2 rounded flex items-center gap-2"
+                            onClick={() => navigate("/adminPanel")} className={buttonClass}
                         >
                             <FaUsersCog size={20}/>
                         </button>
                     </div>
                 )}
                 <button
-                    onClick={logout}
-                    className="bg-[#43a047] hover:bg-green-700 text-white p-2 rounded flex items-center gap-2"
+                    onClick={logout} className={buttonClass}
                 >
                     <FaSignOutAlt size={20}/>
                 </button>
