@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 
 import {baseUrl} from "../common/urls.ts";
 import useLoaderStore from "../store/loader.ts";
@@ -38,7 +39,36 @@ apiAuth.interceptors.response.use(
         return response;
     },
     (error) => {
-        useLoaderStore.getState().setLoading(false);
+if (error.response) {
+    useLoaderStore.getState().setLoading(false);
+    const status = error.response.status;
+    const message = error.response.data?.message || "Something went wrong";
+
+    switch (status) {
+        case 400:
+            toast.error(`Bad Request: ${message}`);
+            break;
+        case 401:
+            toast.error("Unauthorized! Please log in.");
+            break;
+        case 403:
+            toast.error("Forbidden! You don't have access.");
+            break;
+        case 404:
+            toast.error("Not Found! The requested resource does not exist.");
+            break;
+        case 500:
+            toast.error("Server Error! Please try again later.");
+            break;
+        default:
+            toast.error(message);
+            break;
+    }
+} else {
+    toast.error("Network Error! Please check your internet connection.");
+}
+
+
         return Promise.reject(error);
     }
 );

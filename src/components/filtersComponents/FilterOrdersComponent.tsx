@@ -15,27 +15,14 @@ import {COLUMNS_NAME} from "../../common/constants.ts";
 import {Order} from "../../interfaces/order.interface.ts";
 import {urls} from "../../common/urls.ts";
 import {apiAuth} from "../../services/api.ts";
+import {Filters, getInitialFilters} from "../../interfaces/filters.interface.ts";
+import {buttonClass, inputClass} from "../../styles/styles.ts";
 
 
 const FilterOrdersComponent: FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const {groups, setGroups} = useGroupsStore();
-    const [filters, setFilters] = useState({
-        name: searchParams.get("name") || "",
-        surname: searchParams.get("surname") || "",
-        email: searchParams.get("email") || "",
-        phone: searchParams.get("phone") || "",
-        age: searchParams.get("age") || "",
-        course: searchParams.get("course") || CourseEnum.EMPTY,
-        course_format: searchParams.get("course_format") ||CourseFormatEnum.EMPTY,
-        course_type: searchParams.get("course_type") || CourseTypeEnum.EMPTY,
-        status: searchParams.get("status") || StatusEnum.EMPTY,
-        group: searchParams.get("group") || "",
-        manager: searchParams.get("manager") === "true",
-        start_day: searchParams.get("start_day")|| "",
-        end_day: searchParams.get("end_day")|| "",
-
-    });
+    const [filters, setFilters] = useState<Filters>(getInitialFilters(searchParams));
 
     useEffect(() => {
         fetchGroups()
@@ -48,7 +35,6 @@ const FilterOrdersComponent: FC = () => {
             console.error("Error when removing a group:", error);
         }
     }
-
 
     const debouncedUpdateFilters = useMemo(
         () =>
@@ -64,7 +50,7 @@ const FilterOrdersComponent: FC = () => {
     );
 
     const updateFilters = useCallback(
-        (newFilters: Record<string, string | boolean>) => {
+        (newFilters: Filters) => {
             setFilters((prevFilters) => ({ ...prevFilters, ...newFilters }));
             debouncedUpdateFilters(newFilters);
         },
@@ -110,28 +96,28 @@ const exportToExcel =  async () => {
                 placeholder="Name"
                 value={filters.name}
                 onChange={(e) => updateFilters({...filters, name: e.target.value})}
-                className="bg-gray-200 p-2 rounded focus:outline-none m-1"
+                className= {inputClass}
             />
             <input
                 type="text"
                 placeholder="Surname"
                 value={filters.surname}
                 onChange={(e) => updateFilters({...filters, surname: e.target.value})}
-                className="bg-gray-200 p-2 rounded focus:outline-none m-1"
+                className={inputClass}
             />
             <input
                 type="text"
                 placeholder="Email"
                 value={filters.email}
                 onChange={(e) => updateFilters({...filters, email: e.target.value})}
-                className="bg-gray-200 p-2 rounded focus:outline-none m-1"
+                className={inputClass}
             />
             <input
                 type="text"
                 placeholder="Phone"
                 value={filters.phone}
                 onChange={(e) => updateFilters({...filters, phone: e.target.value})}
-                className="bg-gray-200 p-2 rounded focus:outline-none m-1"
+                className={inputClass}
             />
             <input
                 type="number"
@@ -143,7 +129,7 @@ const exportToExcel =  async () => {
             <select
                 value={filters.course}
                 onChange={(e) => updateFilters({...filters, course: e.target.value})}
-                className="bg-gray-200 p-2 rounded focus:outline-none m-1"
+                className={inputClass}
             >
                 <option value={CourseEnum.EMPTY}>all courses</option>
                 <option value={CourseEnum.FE}>FE</option>
@@ -156,7 +142,7 @@ const exportToExcel =  async () => {
 
             <select value={filters.course_format}
                     onChange={(e) => updateFilters({...filters, course_format: e.target.value})}
-                    className="bg-gray-200 p-2 rounded focus:outline-none m-1"
+                    className={inputClass}
             >
                 <option value={CourseFormatEnum.EMPTY}>all formats</option>
                 <option value={CourseFormatEnum.ONLINE}>online</option>
@@ -165,7 +151,7 @@ const exportToExcel =  async () => {
 
             <select value={filters.course_type}
                     onChange={(e) => updateFilters({...filters, course_type: e.target.value})}
-                    className="bg-gray-200 p-2 rounded focus:outline-none m-1"
+                    className={inputClass}
             >
                 <option value={CourseTypeEnum.EMPTY}>all types</option>
                 <option value={CourseTypeEnum.PRO}>pro</option>
@@ -177,7 +163,7 @@ const exportToExcel =  async () => {
 
             <select value={filters.status}
                     onChange={(e) => updateFilters({...filters, status: e.target.value})}
-                    className="bg-gray-200 p-2 rounded focus:outline-none m-1"
+                    className={inputClass}
             >
                 <option value={StatusEnum.EMPTY}>all statuses</option>
                 <option value={StatusEnum.INWORK}>In work</option>
@@ -189,7 +175,7 @@ const exportToExcel =  async () => {
 
             <select value={filters.group}
                     onChange={(e) => updateFilters({...filters, group: e.target.value})}
-                    className="bg-gray-200 p-2 rounded focus:outline-none m-1"
+                    className={inputClass}
             >
                 <option value="">all groups</option>
                 {groups.map((group, index) => (
@@ -203,7 +189,7 @@ const exportToExcel =  async () => {
                 onChange={(e) => updateFilters({...filters, start_day: e.target.value})}
                 min="2000-01-01"
                 max="2040-12-31"
-                className="bg-gray-200 p-2 rounded focus:outline-none m-1"
+                className={inputClass}
             />
             <input
                 type="date"
@@ -211,7 +197,7 @@ const exportToExcel =  async () => {
                 onChange={(e) => updateFilters({...filters, end_day: e.target.value})}
                 min="2000-01-01"
                 max="2040-12-31"
-                className="bg-gray-200 p-2 rounded focus:outline-none m-1"
+                className={inputClass}
             />
 
             <div className="col-start-7 row-start-1 row-end-2 flex items-center">
@@ -223,27 +209,13 @@ const exportToExcel =  async () => {
                     />
                     My
                 </label>
-                <button onClick={() => updateFilters({
-                    name: "",
-                    surname: "",
-                    email: "",
-                    phone: "",
-                    age: "",
-                    course: CourseEnum.EMPTY,
-                    course_type: CourseTypeEnum.EMPTY,
-                    course_format: CourseFormatEnum.EMPTY,
-                    status: StatusEnum.EMPTY,
-                    group: "",
-                    manager: false,
-                    start_day: "",
-                    end_day: ""
-                })}
-                        className="bg-[#43a047] hover:bg-green-700 text-white m-1 p-2 rounded flex items-center gap-2">
+                <button onClick={() => updateFilters(getInitialFilters(new URLSearchParams()))}
+                        className={buttonClass}>
                     <RiResetRightFill size={20}/>
 
                 </button>
                 <button onClick={exportToExcel}
-                        className="bg-[#43a047] hover:bg-green-700 text-white m-1 p-2 rounded flex items-center gap-2">
+                        className={buttonClass}>
                     <FaFileExcel size={20}/>
                 </button>
             </div>

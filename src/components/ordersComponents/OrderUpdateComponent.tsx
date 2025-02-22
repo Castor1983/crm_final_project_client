@@ -11,7 +11,7 @@ import {apiAuth} from "../../services/api.ts";
 import {editOrderSchema} from "../../validators/orderValidators.ts";
 import {Order} from "../../interfaces/order.interface.ts";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+
 
 type Props = {
     isModalOpen: boolean
@@ -105,7 +105,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
             setTimeout(()=> {
                 setIsModalOpen(false)
             }, 2000)
-
+                return
         }
 
     const orderId = editOrder.id?.toString();
