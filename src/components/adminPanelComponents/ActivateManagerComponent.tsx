@@ -3,6 +3,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {urls} from "../../common/urls.ts";
 import {api} from "../../services/api.ts";
 import {AxiosError} from "axios";
+import {buttonClass} from "../../styles/styles.ts";
 
 const ActivateManagerComponent: FC = () => {
         const { activateToken } = useParams();
@@ -61,7 +62,7 @@ const ActivateManagerComponent: FC = () => {
                     className="bg-gray-200 p-2 rounded"
                     required
                 />
-                <button type="submit" className="bg-[#43a047] hover:bg-green-700 text-white px-4 py-2 rounded">
+                <button type="submit" className={buttonClass}>
                     ACTIVATE
                 </button>
             </form>

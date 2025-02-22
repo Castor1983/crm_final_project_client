@@ -1,6 +1,7 @@
 import React from "react";
 import {useForm, UseFormRegister} from "react-hook-form";
 import {LoginForm} from "../../interfaces/loginForm.interface.ts";
+import {buttonClass} from "../../styles/styles.ts";
 
 
 interface LoginFormProps {
@@ -32,7 +33,7 @@ const LoginFormComponent: React.FC<LoginFormProps> = ({ onSubmit, errors, regist
             />
             {errors.password && <p className="text-red-500">{String(errors.password.message)}</p>}
 
-            <button type="submit" className="w-full bg-[#43a047] hover:bg-green-700 text-white p-2 rounded mt-4">
+            <button type="submit" className={buttonClass}>
                 LOGIN
             </button>
         </form>
