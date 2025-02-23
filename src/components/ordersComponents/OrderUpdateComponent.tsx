@@ -127,6 +127,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
             setIsModalOpen(false);
         } catch (error) {
             console.error("Update order is error", error);
+            toast.error("Update order is error")
         }
     };
 
