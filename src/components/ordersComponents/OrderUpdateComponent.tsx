@@ -10,7 +10,7 @@ import {editOrderSchema} from "../../validators/orderValidators.ts";
 import {Order} from "../../interfaces/order.interface.ts";
 import { toast } from "react-toastify";
 import {fetchAddGroup, fetchGroups, fetchUpdateOrder} from "../../requests/requests.ts";
-import {buttonClass} from "../../styles/styles.ts";
+import {buttonClass, inputClass} from "../../styles/styles.ts";
 
 
 type Props = {
@@ -142,7 +142,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
                         <select
                             value={editOrder?.group || ""}
                             onChange={(e) => setEditOrder(editOrder ? { ...editOrder, group: e.target.value } : null)}
-                            className="bg-gray-200 p-2 rounded focus:outline-none"
+                            className={inputClass}
                         >
                             <option value="">Select group</option>
                             {groups.map((group, index) => (
@@ -155,7 +155,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
                             type="text"
                             value={newGroup}
                             onChange={(e) => setNewGroup(e.target.value)}
-                            className="bg-gray-200 p-2 rounded focus:outline-none"
+                            className={inputClass}
                             placeholder="Group"
                         />
 
@@ -187,7 +187,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
                             ...editOrder,
                             status: e.target.value as StatusEnum
                         } : null)}
-                        className="bg-gray-200 p-2 rounded focus:outline-none"
+                        className={inputClass}
                     >
                         <option value={StatusEnum.EMPTY}>-</option>
                         <option value={StatusEnum.INWORK}>In work</option>
@@ -204,7 +204,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
                         type="text"
                         value={editOrder?.name || ""}
                         onChange={(e) => setEditOrder(editOrder ? {...editOrder, name: e.target.value} : null)}
-                        className="bg-gray-200 p-2 rounded focus:outline-none"
+                        className={inputClass}
                     />
                     {validationErrors.name && <span className="text-red-500">{validationErrors.name}</span>}
                 </div>
@@ -218,7 +218,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
                             const value = e.target.value;
                             setEditOrder(editOrder ? { ...editOrder, sum: value === "" ? null : Number(value) } : null);
                         }}
-                        className="bg-gray-200 p-2 rounded appearance-none no-spinner focus:outline-none"
+                        className={`${inputClass} appearance - none no-spinner`}
                     />
                     {validationErrors.sum && <span className="text-red-500">{validationErrors.sum}</span>}
                 </div>
@@ -229,7 +229,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
                         type="text"
                         value={editOrder?.surname || ""}
                         onChange={(e) => setEditOrder(editOrder ? {...editOrder, surname: e.target.value} : null)}
-                        className="bg-gray-200 p-2 rounded focus:outline-none"
+                        className={inputClass}
                     />
                     {validationErrors.surname && <span className="text-red-500">{validationErrors.surname}</span>}
                 </div>
@@ -243,7 +243,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
                             const value = e.target.value;
                             setEditOrder(editOrder ? { ...editOrder, alreadyPaid: value === "" ? null : Number(value) } : null);
                         }}
-                        className="bg-gray-200 p-2 rounded  appearance-none no-spinner focus:outline-none"
+                        className={`${inputClass} appearance - none no-spinner`}
                     />
                     {validationErrors.alreadyPaid && <span className="text-red-500">{validationErrors.alreadyPaid}</span>}
                 </div>
@@ -254,7 +254,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
                         type="email"
                         value={editOrder?.email || ""}
                         onChange={(e) => setEditOrder(editOrder ? {...editOrder, email: e.target.value} : null)}
-                        className="bg-gray-200 p-2 rounded focus:outline-none"
+                        className={inputClass}
                     />
                     {validationErrors.email && <span className="text-red-500">{validationErrors.email}</span>}
                 </div>
@@ -267,7 +267,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
                             ...editOrder,
                             course: e.target.value as CourseEnum
                         } : null)}
-                        className="bg-gray-200 p-2 rounded focus:outline-none"
+                        className={inputClass}
                     >
                         <option value={CourseEnum.EMPTY}>-</option>
                         <option value={CourseEnum.FE}>FE</option>
@@ -289,7 +289,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
                             const value = e.target.value;
                             setEditOrder(editOrder ? {...editOrder, phone: value} : null)
                         }}
-                        className="bg-gray-200 p-2 rounded focus:outline-none"
+                        className={inputClass}
                     />
                     {validationErrors.phone && <span className="text-red-500">{validationErrors.phone}</span>}
                 </div>
@@ -302,7 +302,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
                             ...editOrder,
                             course_format: e.target.value as CourseFormatEnum
                         } : null)}
-                        className="bg-gray-200 p-2 rounded focus:outline-none"
+                        className={inputClass}
                     >
                         <option value={CourseFormatEnum.EMPTY}>-</option>
                         <option value={CourseFormatEnum.ONLINE}>online</option>
@@ -319,7 +319,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
                             const value = e.target.value;
                             setEditOrder(editOrder ? { ...editOrder, age: value === "" ? null : Number(value) } : null);
                         }}
-                        className="bg-gray-200 p-2 rounded appearance-none no-spinner focus:outline-none"
+                        className={`${inputClass} appearance - none no-spinner`}
                     />
                     {validationErrors.age && <span className="text-red-500">{validationErrors.age}</span>}
                 </div>
@@ -333,7 +333,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
                             ...editOrder,
                             course_type: e.target.value as CourseTypeEnum
                         } : null)}
-                        className="bg-gray-200 p-2 rounded focus:outline-none"
+                        className={inputClass}
                     >
                         <option value={CourseTypeEnum.EMPTY}>-</option>
                         <option value={CourseTypeEnum.PRO}>pro</option>
