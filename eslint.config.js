@@ -36,6 +36,12 @@ export default [
           bracketSpacing: true,
         },
       ],
+      'no-unused-vars': [
+        'off',
+        {
+          args: 'none',
+        },
+      ],
       'import/order': [
         'error',
         {

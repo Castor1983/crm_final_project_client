@@ -80,7 +80,7 @@ const fetchComments = async (
     const commentsResponse = await apiAuth.get(urls.orders.orderById(orderId));
     setComments(commentsResponse.data.comments);
   } catch (error) {
-    console.error('Could not get comments');
+    console.error('Could not get comments', error);
   }
 };
 
