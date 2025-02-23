@@ -15,10 +15,10 @@ type Props = {
     setIsModalOpen: (open: boolean) => void
 }
 const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
-    const {editOrder, setEditOrder} = useOrdersStore()
-    const {groups, setGroups, newGroup, setNewGroup}=useGroupsStore()
+    const {editOrder, setEditOrder} = useOrdersStore();
+    const {groups, setGroups, newGroup, setNewGroup}=useGroupsStore();
     const [isAddingGroup, setIsAddingGroup] = useState(false);
-    const [validationErrors, setValidationErrors] = useState<Record<string, string>>({})
+    const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
     const [initialOrder, setInitialOrder] = useState<Order | null>(null);
 
     useEffect(() => {
