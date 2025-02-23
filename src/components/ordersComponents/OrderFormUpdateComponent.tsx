@@ -20,7 +20,7 @@ type Props = {
 
 const OrderFormUpdateComponent: FC<Props> = ({isModalOpen, handleUpdateOrder, handleCloseModal, handleAddGroup, validationErrors, setIsAddingGroup, isAddingGroup }) => {
     const {groups, newGroup, setNewGroup}=useGroupsStore();
-    const {editOrder, setEditOrder} = useOrdersStore();
+            const {editOrder, setEditOrder} = useOrdersStore();
 
     return (
         <Modal isOpen={isModalOpen} onRequestClose={handleCloseModal} className="modal-content">

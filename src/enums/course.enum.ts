@@ -5,5 +5,5 @@ export enum CourseEnum {
   JCX = 'JCX',
   JSCX = 'JSCX',
   FE = 'FE',
-  PCX = 'PCX'
+  PCX = 'PCX',
 }
