@@ -10,7 +10,7 @@ import {useOrdersStore} from "../../store/orders.ts";
 
 type Props = {
     isModalOpen: boolean,
-    validationErrors: Record<string, string>,
+    validationErrors: Record<string, string>;
     isAddingGroup: boolean,
     setIsAddingGroup: React.Dispatch<React.SetStateAction<boolean>>,
     handleAddGroup: () => void,

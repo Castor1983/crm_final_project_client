@@ -6,6 +6,7 @@ import {editOrderSchema} from "../../validators/orderValidators.ts";
 import {Order} from "../../interfaces/order.interface.ts";
 import { toast } from "react-toastify";
 import {fetchAddGroup, fetchGroups, fetchUpdateOrder} from "../../requests/requests.ts";
+import OrderFormUpdateComponent from "./OrderFormUpdateComponent.tsx";
 
 
 
@@ -131,7 +132,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
 
     return(
 
-     <OrderUpdateComponent isModalOpen={isModalOpen}
+     <OrderFormUpdateComponent isModalOpen={isModalOpen}
                            validationErrors={validationErrors}
                            handleAddGroup={handleAddGroup}
                            handleCloseModal={handleCloseModal}
