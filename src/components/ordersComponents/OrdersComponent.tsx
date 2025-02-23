@@ -18,30 +18,32 @@ const OrdersComponent: FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-        const fetchOrders = async () => {
-            try {
-                const params: Record<string, string> = {
-                    ...Object.fromEntries(searchParams.entries()),
-                    page: currentPage.toString(),
-                };
 
-                if (sortConfig.column) {
-                    params.sort = sortConfig.column;
-                    params.order = sortConfig.direction;
-                }
-                const response = await apiAuth.get(ordersUrl, {
-                    params
-                });
-                setOrders(response.data.data);
-                setTotalPages(response.data.total_pages);
-
-            } catch (error) {
-                console.error('Ошибка при загрузке заявок:', error);
-
-            }
-        };
         fetchOrders();
     }, [searchParams, sortConfig, currentPage, isModalOpen]);
+
+    const fetchOrders = async () => {
+        try {
+            const params: Record<string, string> = {
+                ...Object.fromEntries(searchParams.entries()),
+                page: currentPage.toString(),
+            };
+
+            if (sortConfig.column) {
+                params.sort = sortConfig.column;
+                params.order = sortConfig.direction;
+            }
+            const response = await apiAuth.get(ordersUrl, {
+                params
+            });
+            setOrders(response.data.data);
+            setTotalPages(response.data.total_pages);
+
+        } catch (error) {
+            console.error('Ошибка при загрузке заявок:', error);
+
+        }
+    };
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);

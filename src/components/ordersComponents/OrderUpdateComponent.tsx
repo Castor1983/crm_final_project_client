@@ -11,6 +11,8 @@ import {apiAuth} from "../../services/api.ts";
 import {editOrderSchema} from "../../validators/orderValidators.ts";
 import {Order} from "../../interfaces/order.interface.ts";
 import { toast } from "react-toastify";
+import {fetchGroups} from "../../requests/requests.ts";
+import {buttonClass} from "../../styles/styles.ts";
 
 
 type Props = {
@@ -25,17 +27,9 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
     const [initialOrder, setInitialOrder] = useState<Order | null>(null);
 
     useEffect(() => {
-        const fetchGroups = async () => {
-            try {
-                const response = await apiAuth.get(urls.orders.groups)
-
-                setGroups(response.data);
-            } catch (error) {
-                console.error("Error when removing a group:", error);
-            }
-        };
-            fetchGroups();
+            fetchGroups(setGroups);
     }, [isAddingGroup]);
+
     useEffect(() => {
         if (editOrder) {
             setInitialOrder(editOrder);
@@ -176,16 +170,16 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
                 {validationErrors.group && <span className="text-red-500">{validationErrors.group}</span>}
                     {!isAddingGroup ? (
                         <button onClick={() => setIsAddingGroup(true)}
-                                className="mt-2 bg-[#43a047] text-white p-2 rounded hover:bg-green-700">
+                                className={buttonClass}>
                             ADD GROUP
                         </button>
                     ) : (
                         <div className="flex gap-2 mt-2">
-                            <button onClick={handleAddGroup} className="bg-[#43a047] text-white p-2 rounded hover:bg-green-700">
+                            <button onClick={handleAddGroup} className={buttonClass}>
                                 ADD
                             </button>
                             <button onClick={() => setIsAddingGroup(false)}
-                                    className="bg-[#43a047] text-white p-2 rounded hover:bg-green-700">
+                                    className={buttonClass}>
                                 SELECT
                             </button>
                         </div>
@@ -359,10 +353,10 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
             </div>
 
             <div className="flex justify-end gap-2 mt-4">
-                <button onClick={handleCloseModal} className="bg-[#43a047] text-white px-4 py-2 rounded hover:bg-green-700">
+                <button onClick={handleCloseModal} className={buttonClass}>
                     CLOSE
                 </button>
-                <button onClick={handleUpdateOrder} className="bg-[#43a047] text-white px-4 py-2 rounded hover:bg-green-700">SUBMIT</button>
+                <button onClick={handleUpdateOrder} className={buttonClass}>SUBMIT</button>
             </div>
         </Modal>
     )

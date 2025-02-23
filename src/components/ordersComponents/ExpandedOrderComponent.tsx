@@ -2,10 +2,10 @@ import {FC, useEffect, useState} from "react";
 import {useAuthStore} from "../../store/auth.ts";
 import {Order} from "../../interfaces/order.interface.ts";
 import {useOrdersStore} from "../../store/orders.ts";
-import {urls} from "../../common/urls.ts";
-import {apiAuth} from "../../services/api.ts";
 import {CommentInterface} from "../../interfaces/comment.interface.ts";
 import CommentsModalComponent from "./CommentsModalComponent.tsx";
+import {fetchAddComment, fetchComments} from "../../requests/requests.ts";
+import {buttonClass} from "../../styles/styles.ts";
 
 type Props = {
     setIsModalOpen: (open: boolean) => void
@@ -22,17 +22,9 @@ const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
 
 
     useEffect(() => {
-        const fetchComments =  async () => {
-            try {
-                const commentsResponse = await apiAuth.get(urls.orders.orderById(order.id))
-                setComments(commentsResponse.data.comments)
-            }catch (error){
-                console.error('Could not get comments')
-            }
-
-        }
-        fetchComments()
+        fetchComments(order.id, setComments)
     }, [comment]);
+
 
 
     const handleSubmitComment = async (orderId: number) => {
@@ -41,9 +33,7 @@ const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
             return;
         }
         try {
-            await apiAuth.post(urls.orders.addComment(orderId), {
-                body: comment,
-            });
+            await fetchAddComment(orderId, comment)
             setComment('');
             setError('');
         } catch (error) {
@@ -100,14 +90,14 @@ const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
                                         handleSubmitComment(order.id)
                                     }
                                 }}
-                                className="bg-[#43a047] text-white px-4 py-2 mt-2 rounded-[5px] hover:bg-green-700"
+                                className={buttonClass}
                             >
                                 Submit
                             </button>
 
                             <button
                                 onClick={() => handleOpenModal(order)}
-                                className="bg-[#43a047] text-white px-4 py-2 mt-2 rounded-[5px] hover:bg-green-700"
+                                className={buttonClass}
                             >
                                 Edit
                             </button>

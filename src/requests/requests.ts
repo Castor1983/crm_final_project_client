@@ -6,6 +6,8 @@ import {LoginForm} from "../interfaces/loginForm.interface.ts";
 import {toast} from "react-toastify";
 import {StatsInterface} from "../interfaces/stats.interface.ts";
 import {ManagerInterface} from "../interfaces/manager.interface.ts";
+import {CommentInterface} from "../interfaces/comment.interface.ts";
+import React from "react";
 
 
 const fetchGroups = async (setGroups : (groups: GroupInterface[]) => void) => {
@@ -66,6 +68,21 @@ const fetchActivatePassword = async (activateToken: string | undefined, password
     });
 }
 
+const fetchComments =  async (orderId: number, setComments: React.Dispatch<React.SetStateAction<CommentInterface[]>> ) => {
+    try {
+        const commentsResponse = await apiAuth.get(urls.orders.orderById(orderId))
+        setComments(commentsResponse.data.comments)
+    }catch (error){
+        console.error('Could not get comments')
+    }
+
+}
+
+const fetchAddComment = async  (orderId: number, comment: string) => {
+    await apiAuth.post(urls.orders.addComment(orderId), {
+        body: comment,
+    });
+}
 
 export {
     fetchGroups,
@@ -77,5 +94,7 @@ export {
     fetchRecoveryPassword,
     fetchBanManager,
     fetchUnbanManager,
-    fetchActivatePassword
+    fetchActivatePassword,
+    fetchComments,
+    fetchAddComment
 }

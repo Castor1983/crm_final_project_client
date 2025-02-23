@@ -1,6 +1,7 @@
 import {FC, useState} from "react";
 import {CommentInterface} from "../../interfaces/comment.interface.ts";
 import PaginationComponent from "../paginationComponents/PaginationCOmponent.tsx";
+import {buttonClass} from "../../styles/styles.ts";
 
 type Props ={
     comments: CommentInterface[],
@@ -41,7 +42,7 @@ const CommentsModalComponent: FC<Props> = ({ comments, onClose }) => {
 
                 <button
                     onClick={onClose}
-                    className="bg-[#43a047] text-white px-4 py-2 mt-2 rounded-[5px] hover:bg-green-700"
+                    className={buttonClass}
                 >
                     Close
                 </button>
