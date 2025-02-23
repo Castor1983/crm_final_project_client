@@ -7,10 +7,9 @@ import {useSearchParams} from "react-router-dom";
 import {useGroupsStore} from "../../store/groups.ts";
 import {COLUMNS_NAME} from "../../common/constants.ts";
 import {Order} from "../../interfaces/order.interface.ts";
-import {urls} from "../../common/urls.ts";
-import {apiAuth} from "../../services/api.ts";
 import {Filters, getInitialFilters} from "../../interfaces/filters.interface.ts";
 import FilterFormComponent from "./FilterFormComponent.tsx";
+import {fetchGroups, fetchOrdersExportToExcel} from "../../requests/requests.ts";
 
 
 const FilterOrdersComponent: FC = () => {
@@ -19,16 +18,9 @@ const FilterOrdersComponent: FC = () => {
     const [filters, setFilters] = useState<Filters>(getInitialFilters(searchParams));
 
     useEffect(() => {
-        fetchGroups()
+        fetchGroups(setGroups)
     }, []);
-    const fetchGroups = async () => {
-        try {
-            const response = await apiAuth.get(urls.orders.groups);
-            setGroups(response.data);
-        } catch (error) {
-            console.error("Error when removing a group:", error);
-        }
-    }
+
 
     const debouncedUpdateFilters = useMemo(
         () =>
@@ -56,9 +48,7 @@ const exportToExcel =  async () => {
             ...Object.fromEntries(searchParams.entries())
         };
 
-        const response = await apiAuth.get(urls.orders.exportToExcel, {
-            params: params,
-        });
+        const response =  await fetchOrdersExportToExcel(params)
     const orders: Order[] = response.data.data
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet('Orders');
@@ -72,7 +62,6 @@ const exportToExcel =  async () => {
     orders.forEach((order) => {
         worksheet.addRow(order);
     });
-
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
     const now = new Date();

@@ -2,7 +2,10 @@ import {FC, useState} from "react";
 import {CommentInterface} from "../../interfaces/comment.interface.ts";
 import PaginationComponent from "../paginationComponents/PaginationCOmponent.tsx";
 
-type Props ={ comments: CommentInterface[], onClose: () => void }
+type Props ={
+    comments: CommentInterface[],
+    onClose: () => void
+}
 const CommentsModalComponent: FC<Props> = ({ comments, onClose }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const commentsPerPage = 5;

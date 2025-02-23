@@ -1,31 +1,19 @@
 import {FC, useEffect, useState} from "react";
-import { toast } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
 
 import {useManagersStore} from "../../store/managers.ts";
 import ManagerComponent from "./ManagerComponent.tsx";
 import CreateManagerWindow from "./CreateManagerWindow.tsx";
-import {managersUrl} from "../../common/urls.ts";
-import {apiAuth} from "../../services/api.ts";
+import {fetchManagers} from "../../requests/requests.ts";
+import {buttonClass} from "../../styles/styles.ts";
 
 const AdminPanelComponent: FC =() => {
     const { stats, setStats, managers, setManagers} = useManagersStore()
     const [isOpen, setIsOpen] = useState(false);
 
-    const fetchManagers = async () => {
-        try {
-            const  managersResponse = await
-                apiAuth.get(managersUrl);
-
-            setStats(managersResponse.data.orderStats);
-            setManagers(managersResponse.data.data);
-        } catch (err) {
-            console.error("Error fetching managers:", err);
-            toast.error("Failed to load managers", {autoClose: 3000});
-        }
-    };
     useEffect(() => {
-        fetchManagers();
+        fetchManagers(setStats, setManagers);
     }, []);
 
     return (
@@ -37,7 +25,7 @@ const AdminPanelComponent: FC =() => {
                 Agree: {stats.agree} Disagree: {stats.disagree}
                 Dubbing: {stats.dubbing}  New: {stats.new}
             </p>
-            <button onClick={() => setIsOpen(true)} className="bg-[#43a047] text-white px-4 py-1 text-[12px] rounded hover:bg-green-700">
+            <button onClick={() => setIsOpen(true)} className={buttonClass}>
                 CREATE
             </button>
             {managers.length > 0 ? (

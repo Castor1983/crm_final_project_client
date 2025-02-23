@@ -1,14 +1,13 @@
 import React, {FC, useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
-import {urls} from "../../common/urls.ts";
-import {api} from "../../services/api.ts";
 import {AxiosError} from "axios";
+
 import {buttonClass} from "../../styles/styles.ts";
+import {fetchActivatePassword} from "../../requests/requests.ts";
 
 const ActivateManagerComponent: FC = () => {
-        const { activateToken } = useParams();
+    const { activateToken } = useParams();
     const navigate = useNavigate();
-
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [message, setMessage] = useState("");
@@ -28,10 +27,8 @@ const ActivateManagerComponent: FC = () => {
         }
 
         try {
-             await api.post(urls.managers.activatePassword(activateToken), {
-                password: password
-            });
 
+            await fetchActivatePassword(activateToken, password)
             setMessage("Password is successfully set!");
             setTimeout(() => navigate("/"), 2000)
         } catch (error) {

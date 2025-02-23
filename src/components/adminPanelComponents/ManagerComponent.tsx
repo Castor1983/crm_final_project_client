@@ -2,23 +2,31 @@ import {FC, useState} from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {ManagerInterface} from "../../interfaces/manager.interface.ts";
-import {urls} from "../../common/urls.ts";
-import {apiAuth} from "../../services/api.ts";
+import {useManagersStore} from "../../store/managers.ts";
+import {StatsInterface} from "../../interfaces/stats.interface.ts";
+import {buttonClass} from "../../styles/styles.ts";
+import {
+    fetchActivateManager,
+    fetchBanManager,
+    fetchRecoveryPassword,
+    fetchUnbanManager
+} from "../../requests/requests.ts";
 
 type Props = {
     manager: ManagerInterface
-    onUpdate: () => void;
+    onUpdate: (setStats: (stats: StatsInterface) => void, setManagers: (managers: ManagerInterface[]) => void) => void;
 }
 
 const ManagerComponent: FC<Props> = ({manager, onUpdate}) => {
     const [activationLink, setActivationLink] = useState("");
     const [ban, setBan] = useState<boolean>(manager.is_banned)
     const [buttonText, setButtonText] = useState(manager.is_active ? "RECOVERY PASSWORD" : "ACTIVATE");
+    const {setStats, setManagers} = useManagersStore()
 
     const handleActivate = async () => {
        try{
-           const activateResponse = await apiAuth.post(urls.managers.activateManager(manager.id),
-           )
+           const activateResponse = await fetchActivateManager(manager.id)
+
            setActivationLink(activateResponse.data.activationLink);
            setButtonText("COPY TO CLIPBOARD");
        }catch (error){
@@ -31,8 +39,7 @@ const ManagerComponent: FC<Props> = ({manager, onUpdate}) => {
 
     const handleRecovery = async () => {
         try{
-            const recoveryResponse = await apiAuth.post(urls.managers.deactivate(manager.id),
-                )
+            const recoveryResponse = await fetchRecoveryPassword(manager.id)
                 setActivationLink(recoveryResponse.data.activationLink);
                 setButtonText("COPY TO CLIPBOARD");
         }catch (error){
@@ -43,7 +50,6 @@ const ManagerComponent: FC<Props> = ({manager, onUpdate}) => {
 
     }
 
-
     const copyToClipboard = () => {
         if (activationLink) {
             navigator.clipboard.writeText(activationLink);
@@ -53,10 +59,10 @@ const ManagerComponent: FC<Props> = ({manager, onUpdate}) => {
     };
     const handleBan = async () => {
         try {
-            await apiAuth.patch(urls.managers.ban(manager.id),);
+          await fetchBanManager(manager.id)
             setBan(true);
             setButtonText("ACTIVATE")
-            onUpdate();
+            onUpdate(setStats, setManagers);
         } catch (error) {
             console.error("Ban error:", error);
             toast.error('Ban error')
@@ -65,9 +71,9 @@ const ManagerComponent: FC<Props> = ({manager, onUpdate}) => {
 
     const handleUnban = async () => {
         try {
-            await apiAuth.patch(urls.managers.unban(manager.id));
+            fetchUnbanManager(manager.id)
             setBan(false);
-            onUpdate();
+            onUpdate(setStats, setManagers);
             setButtonText("RECOVERY PASSWORD")
         } catch (error) {
             console.error("Unban error:", error);
@@ -112,12 +118,12 @@ const ManagerComponent: FC<Props> = ({manager, onUpdate}) => {
                             handleActivate();
                         }
                     }}
-                    className="bg-[#43a047] hover:bg-green-700 rounded text-white px-4 py-1"
+                    className={buttonClass}
                 >
                     {buttonText}
                 </button>
                 <button  onClick={ban ? handleUnban : handleBan}
-                         className="bg-[#43a047] hover:bg-green-700 rounded text-white px-4 py-1 transition-all duration-200"
+                         className={`${buttonClass} transition - all duration-200`}
                 >
                     {ban ? "UNBAN" : "BAN"}
                 </button>
