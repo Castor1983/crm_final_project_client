@@ -6,12 +6,10 @@ import {CourseTypeEnum} from "../../enums/courseType.enum.ts";
 import Modal from "react-modal";
 import {useOrdersStore} from "../../store/orders.ts";
 import {useGroupsStore} from "../../store/groups.ts";
-import {urls} from "../../common/urls.ts";
-import {apiAuth} from "../../services/api.ts";
 import {editOrderSchema} from "../../validators/orderValidators.ts";
 import {Order} from "../../interfaces/order.interface.ts";
 import { toast } from "react-toastify";
-import {fetchGroups} from "../../requests/requests.ts";
+import {fetchAddGroup, fetchGroups, fetchUpdateOrder} from "../../requests/requests.ts";
 import {buttonClass} from "../../styles/styles.ts";
 
 
@@ -52,10 +50,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
             return;
         }
         try {
-            const response = await apiAuth.post(
-                urls.orders.groups,
-                { name: newGroup },
-            );
+            const response = await fetchAddGroup(newGroup)
             const newGroups = [...groups, response.data];
             setGroups(newGroups);
 
@@ -66,6 +61,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
             setValidationErrors((prev) => ({ ...prev, group: "" }));
         } catch (error) {
             console.error("the group adding is error. Try again.", error);
+            toast.error("the group adding is error. Try again.")
             setValidationErrors((prev) => ({
                 ...prev,
                 group: "the group adding is error. Try again.",
@@ -129,10 +125,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
         }
         setValidationErrors({});
         try {
-            await apiAuth.patch(
-                urls.orders.editOrder(orderId),
-               updatedOrder,
-            );
+           await fetchUpdateOrder(orderId, updatedOrder)
             toast.success("The order has been updated successfully!", { autoClose: 3000 });
             setIsModalOpen(false);
         } catch (error) {

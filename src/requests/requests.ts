@@ -84,6 +84,20 @@ const fetchAddComment = async  (orderId: number, comment: string) => {
     });
 }
 
+const fetchAddGroup = async (newGroup: string) => {
+   return  await apiAuth.post(
+        urls.orders.groups,
+        { name: newGroup },
+    );
+}
+
+const fetchUpdateOrder = async (orderId: string, updatedOrder: { [p: string]: any }) => {
+    await apiAuth.patch(
+        urls.orders.editOrder(orderId),
+        updatedOrder,
+    );
+}
+
 export {
     fetchGroups,
     fetchOrdersExportToExcel,
@@ -96,5 +110,7 @@ export {
     fetchUnbanManager,
     fetchActivatePassword,
     fetchComments,
-    fetchAddComment
+    fetchAddComment,
+    fetchAddGroup,
+    fetchUpdateOrder
 }
