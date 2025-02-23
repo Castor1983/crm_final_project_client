@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
-import { OrdersState } from '../interfaces/ordersState.interface.ts';
 import { Order } from '../interfaces/order.interface.ts';
+import { OrdersState } from '../interfaces/ordersState.interface.ts';
 
 export const useOrdersStore = create<OrdersState>(set => ({
   orders: [],

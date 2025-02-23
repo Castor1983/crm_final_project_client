@@ -1,7 +1,7 @@
 import { create } from 'zustand/index';
 
-import { CommentsStateInterface } from '../interfaces/commentsState.interface.ts';
 import { CommentInterface } from '../interfaces/comment.interface.ts';
+import { CommentsStateInterface } from '../interfaces/commentsState.interface.ts';
 
 export const useCommentsStore = create<CommentsStateInterface>(set => ({
   comments: [],

@@ -1,13 +1,13 @@
-import { toast } from 'react-toastify';
 import React from 'react';
+import { toast } from 'react-toastify';
 
-import { api, apiAuth } from '../services/api.ts';
 import { managersUrl, urls } from '../common/urls.ts';
+import { CommentInterface } from '../interfaces/comment.interface.ts';
 import { GroupInterface } from '../interfaces/group.interface.ts';
 import { LoginForm } from '../interfaces/loginForm.interface.ts';
-import { StatsInterface } from '../interfaces/stats.interface.ts';
 import { ManagerInterface } from '../interfaces/manager.interface.ts';
-import { CommentInterface } from '../interfaces/comment.interface.ts';
+import { StatsInterface } from '../interfaces/stats.interface.ts';
+import { api, apiAuth } from '../services/api.ts';
 
 const fetchGroups = async (setGroups: (groups: GroupInterface[]) => void) => {
   try {

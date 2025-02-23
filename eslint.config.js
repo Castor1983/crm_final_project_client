@@ -1,9 +1,9 @@
-import globals from 'globals';
 import js from '@eslint/js';
-import prettier from 'eslint-plugin-prettier';
 import typescript from '@typescript-eslint/eslint-plugin';
 import parser from '@typescript-eslint/parser';
 import importPlugin from 'eslint-plugin-import';
+import prettier from 'eslint-plugin-prettier';
+import globals from 'globals';
 
 export default [
   js.configs.recommended,
@@ -40,15 +40,21 @@ export default [
         'error',
         {
           groups: [
-            ['builtin', 'external'],
+            ['builtin'],
+            ['external'],
             ['internal'],
             ['parent', 'sibling', 'index'],
           ],
+          alphabetize: {
+            order: 'asc',
+            caseInsensitive: true,
+          },
           'newlines-between': 'always',
         },
       ],
       'import/no-duplicates': 'error',
       'import/first': 'error',
+      'import/no-unresolved': 'error',
     },
   },
   {

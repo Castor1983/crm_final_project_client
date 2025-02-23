@@ -1,7 +1,7 @@
 import { CourseEnum } from '../enums/course.enum.ts';
-import { StatusEnum } from '../enums/status.enum.ts';
-import { CourseTypeEnum } from '../enums/courseType.enum.ts';
 import { CourseFormatEnum } from '../enums/courseFormat.enum.ts';
+import { CourseTypeEnum } from '../enums/courseType.enum.ts';
+import { StatusEnum } from '../enums/status.enum.ts';
 
 export interface Filters {
   name: string;

@@ -1,6 +1,6 @@
+import { jwtDecode } from 'jwt-decode';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { jwtDecode } from 'jwt-decode';
 
 import { AuthState } from '../interfaces/authState.interface.ts';
 import { IJwtPayload } from '../interfaces/jwt-payload.interface.ts';
