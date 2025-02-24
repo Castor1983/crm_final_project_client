@@ -1,4 +1,3 @@
-import React from 'react';
 import { toast } from 'react-toastify';
 
 import { managersUrl, urls } from '../common/urls.ts';
@@ -74,7 +73,7 @@ const fetchActivatePassword = async (
 
 const fetchComments = async (
   orderId: number,
-  setComments: React.Dispatch<React.SetStateAction<CommentInterface[]>>,
+  setComments: (comments: CommentInterface[]) => void,
 ) => {
   try {
     const commentsResponse = await apiAuth.get(urls.orders.orderById(orderId));

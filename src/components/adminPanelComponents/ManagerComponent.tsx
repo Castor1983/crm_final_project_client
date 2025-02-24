@@ -71,7 +71,7 @@ const ManagerComponent: FC<Props> = ({manager, onUpdate}) => {
 
     const handleUnban = async () => {
         try {
-            fetchUnbanManager(manager.id)
+            await fetchUnbanManager(manager.id)
             setBan(false);
             onUpdate(setStats, setManagers);
             setButtonText("RECOVERY PASSWORD")

@@ -2,10 +2,10 @@ import {FC, useEffect, useState} from "react";
 import {useAuthStore} from "../../store/auth.ts";
 import {Order} from "../../interfaces/order.interface.ts";
 import {useOrdersStore} from "../../store/orders.ts";
-import {CommentInterface} from "../../interfaces/comment.interface.ts";
 import CommentsModalComponent from "./CommentsModalComponent.tsx";
 import {fetchAddComment, fetchComments} from "../../requests/requests.ts";
 import {buttonClass} from "../../styles/styles.ts";
+import {useCommentsStore} from "../../store/comments.ts";
 
 type Props = {
     setIsModalOpen: (open: boolean) => void
@@ -14,8 +14,7 @@ type Props = {
 
 const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
     const {manager} = useAuthStore()
-    const [comments,  setComments] = useState<CommentInterface[]>([]);
-    const [comment, setComment] = useState('');
+    const {comments, setComments, comment, setComment} = useCommentsStore();
     const {setEditOrder}=useOrdersStore()
     const [error, setError] = useState("");
     const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false);
