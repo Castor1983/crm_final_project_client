@@ -6,6 +6,7 @@ import {CommentInterface} from "../../interfaces/comment.interface.ts";
 import CommentsModalComponent from "./CommentsModalComponent.tsx";
 import {fetchAddComment, fetchComments} from "../../requests/requests.ts";
 import {buttonClass} from "../../styles/styles.ts";
+import {useCommentsStore} from "../../store/comments.ts";
 
 type Props = {
     setIsModalOpen: (open: boolean) => void
@@ -14,27 +15,29 @@ type Props = {
 
 const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
     const {manager} = useAuthStore()
-    const [comments,  setComments] = useState<CommentInterface[]>([]);
-    const [comment, setComment] = useState('');
+    const [commentsState,  setCommentsState] = useState<CommentInterface[]>([]);
+    const [commentState, setCommentState] = useState('');
     const {setEditOrder}=useOrdersStore()
+    const {setComment} = useCommentsStore()
     const [error, setError] = useState("");
     const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false);
 
 
     useEffect(() => {
-        fetchComments(order.id, setComments)
-    }, [comment]);
+        fetchComments(order.id, setCommentsState)
+    }, [commentState]);
 
 
 
     const handleSubmitComment = async (orderId: number) => {
-        if (!comment.trim()) {
+        if (!commentState.trim()) {
             setError("The field must not be empty");
             return;
         }
         try {
-            await fetchAddComment(orderId, comment)
-            setComment('');
+            await fetchAddComment(orderId, commentState)
+            setComment(commentState)
+            setCommentState('');
             setError('');
         } catch (error) {
             console.error('Error sending comment:', error);
@@ -51,9 +54,9 @@ const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
                 <p><strong>Message:</strong> {order.msg || 'None'}</p>
                 <p><strong>UTM:</strong> {order.utm || 'None'}</p>
                 <div className="mt-4 p-2 border-t border-gray-300" onClick={() => setIsCommentsModalOpen(true)}>
-                    {comments && comments.length > 0 ? (
+                    {commentsState && commentsState.length > 0 ? (
                         <ul className="space-y-2">
-                            {[...comments]
+                            {[...commentsState]
                                 .sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime())
                                 .slice(0, 3).map((comment, index) => (
                                 <li key={index} className="p-2 bg-white rounded-md shadow-sm">
@@ -73,9 +76,9 @@ const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
                         <div className="flex flex-col relative">
                             <input
                                 type="text"
-                                value={comment}
+                                value={commentState}
                                 onChange={(e) => {
-                                    setComment(e.target.value);
+                                    setCommentState(e.target.value);
                                     setError("");
                                 }}
                                 placeholder="Comment"
@@ -106,7 +109,7 @@ const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
                     </div>
                 )}
                 {isCommentsModalOpen && (
-                    <CommentsModalComponent comments={comments} onClose={() => setIsCommentsModalOpen(false)} />
+                    <CommentsModalComponent comments={commentsState} onClose={() => setIsCommentsModalOpen(false)} />
                 )}
             </td>
         </tr>

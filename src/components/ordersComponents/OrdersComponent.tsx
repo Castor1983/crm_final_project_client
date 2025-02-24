@@ -9,6 +9,7 @@ import OrderUpdateComponent from "./OrderUpdateComponent.tsx";
 import OrdersTableComponent from "./OrdersTableComponent.tsx";
 import {apiAuth} from "../../services/api.ts";
 import {ordersUrl} from "../../common/urls.ts";
+import {useCommentsStore} from "../../store/comments.ts";
 
 const OrdersComponent: FC = () => {
     const {setOrders, editOrder} = useOrdersStore();
@@ -16,11 +17,11 @@ const OrdersComponent: FC = () => {
     const {sortConfig} = useSortConfigStore();
     const { currentPage, setCurrentPage, setTotalPages } = usePaginationStore();
     const [isModalOpen, setIsModalOpen] = useState(false);
-
+    const {comment} = useCommentsStore()
     useEffect(() => {
 
         fetchOrders();
-    }, [searchParams, sortConfig, currentPage, isModalOpen]);
+    }, [searchParams, sortConfig, currentPage, isModalOpen, comment]);
 
     const fetchOrders = async () => {
         try {
