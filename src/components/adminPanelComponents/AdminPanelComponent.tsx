@@ -9,12 +9,12 @@ import {fetchManagers} from "../../requests/requests.ts";
 import {buttonClass} from "../../styles/styles.ts";
 
 const AdminPanelComponent: FC =() => {
-    const { stats, setStats, managers, setManagers} = useManagersStore()
+    const { stats, setStats, managers, setManagers, manager} = useManagersStore()
     const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
         fetchManagers(setStats, setManagers);
-    }, []);
+    }, [manager]);
 
     return (
         <div className="w-[100%] flex-auto pl-40 pr-40">
