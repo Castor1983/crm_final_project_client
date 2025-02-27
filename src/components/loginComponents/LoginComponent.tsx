@@ -23,7 +23,7 @@ const LoginComponent: FC = () => {
         }
     } catch (error) {
         const err = error as AxiosError
-        if (err.response && err.response.status === 401) {
+        if (err.response && (err.response.status === 401 || err.response.status === 404)) {
             setError("password", { type: "manual", message: "Wrong email or password" });
         }
     }
