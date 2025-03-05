@@ -18,8 +18,8 @@ const OrdersComponent: FC = () => {
     const { currentPage, setCurrentPage, setTotalPages } = usePaginationStore();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const {comment} = useCommentsStore()
-    useEffect(() => {
 
+    useEffect(() => {
         fetchOrders();
     }, [searchParams, sortConfig, currentPage, isModalOpen, comment]);
 
@@ -41,7 +41,7 @@ const OrdersComponent: FC = () => {
             setTotalPages(response.data.total_pages);
 
         } catch (error) {
-            console.error('Ошибка при загрузке заявок:', error);
+            console.error('Помилка при завантаженні замовлень', error);
 
         }
     };
