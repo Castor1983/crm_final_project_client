@@ -29,6 +29,14 @@ const OrdersComponent: FC = () => {
 
     const fetchOrders = async () => {
         try {
+            if (!searchParams.has("page")) {
+                setSearchParams(prev => {
+                    const newParams = new URLSearchParams(prev);
+                    newParams.set("page", "1");
+                    setCurrentPage(1);
+                    return newParams;
+                });
+            }
             const params: Record<string, string> = {
                 ...Object.fromEntries(searchParams.entries()),
                 page: searchParams.get("page") || "1",
