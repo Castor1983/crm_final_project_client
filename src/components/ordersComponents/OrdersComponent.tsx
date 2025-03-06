@@ -19,15 +19,19 @@ const OrdersComponent: FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const {comment} = useCommentsStore()
 
+    const pageFromUrl = Number(searchParams.get('page')) || 1;
+    useEffect(() => {
+        setCurrentPage(pageFromUrl);
+    }, []);
     useEffect(() => {
         fetchOrders();
-    }, [searchParams, sortConfig, currentPage, isModalOpen, comment]);
+    }, [searchParams, sortConfig, isModalOpen, comment]);
 
     const fetchOrders = async () => {
         try {
             const params: Record<string, string> = {
                 ...Object.fromEntries(searchParams.entries()),
-                page: currentPage.toString(),
+                page: searchParams.get("page") || "1",
             };
 
             if (sortConfig.column) {

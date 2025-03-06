@@ -28,7 +28,7 @@ const FilterOrdersComponent: FC = () => {
                 const filteredParams = Object.fromEntries(
                     Object.entries(newFilters)
                         .filter(([, value]) => value !== "" && value !== false)
-                        .map(([key, value]) => [key, String(value)]) // Преобразуем в строки
+                        .map(([key, value]) => [key, String(value)])
                 );
                 setSearchParams(filteredParams);
             }, 500),
