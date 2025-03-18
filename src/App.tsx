@@ -19,13 +19,14 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
 Modal.setAppElement("#root");
 
 const App = () => {
+    const accessToken = useAuthStore((state) => state.accessToken)
     return (
         <Router>
             <SessionManagerComponent/>
             <SessionWatcherComponent/>
             <ToastContainer />
             <Routes>
-                <Route path="/" element={<Navigate to="/login" replace />} />
+                <Route path="/" element={<Navigate to={accessToken ? "/orders" : "/login"} replace />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>} />
                 <Route path="/adminPanel" element={<ProtectedRoute><AdminPanelPage /></ProtectedRoute>} />
