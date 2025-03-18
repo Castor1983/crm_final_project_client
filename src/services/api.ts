@@ -2,6 +2,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 import { baseUrl } from '../common/urls.ts';
+import { useAuthStore } from '../store/auth.ts';
 import useLoaderStore from '../store/loader.ts';
 
 export const api = axios.create({
@@ -55,6 +56,8 @@ apiAuth.interceptors.response.use(
           break;
         case 401:
           toast.error('Unauthorized! Please log in.');
+          useAuthStore.getState().logout();
+          window.location.href = '/login';
           break;
         case 403:
           toast.error("Forbidden! You don't have access.");
