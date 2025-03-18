@@ -12,8 +12,7 @@ const ban = '/ban';
 const unban = '/unban';
 const exportToExcel = '/export';
 const groups = '/groups';
-const addComment = '/addComment';
-const edit = '/edit';
+const addComment = '/comment';
 
 export const urls = {
   auth: {
@@ -36,7 +35,6 @@ export const urls = {
     groups: `${ordersUrl}${groups}`,
     orderById: (orderId: number | null) => `${ordersUrl}/${orderId}`,
     addComment: (orderId: number) => `${ordersUrl}${addComment}/${orderId}`,
-    editOrder: (orderId: string | undefined) =>
-      `${ordersUrl}${edit}/${orderId}`,
+    editOrder: (orderId: string | undefined) => `${ordersUrl}/${orderId}`,
   },
 };
