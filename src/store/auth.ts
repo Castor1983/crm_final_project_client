@@ -23,8 +23,8 @@ export const useAuthStore = create<AuthState>()(
         const refreshTime = (decoded.exp - 60 - now) * 1000;
 
         if (refreshTime > 0) {
-          const timer = setTimeout(() => {
-            fetchRefresh();
+          const timer = setTimeout(async () => {
+            await fetchRefresh();
           }, refreshTime);
 
           set({ refreshTimer: timer });
