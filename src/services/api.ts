@@ -10,6 +10,7 @@ export const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 });
 
 export const apiAuth = axios.create({
@@ -17,6 +18,7 @@ export const apiAuth = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 });
 
 apiAuth.interceptors.request.use(
@@ -44,7 +46,7 @@ apiAuth.interceptors.response.use(
     useLoaderStore.getState().setLoading(false);
     return response;
   },
-  error => {
+  async error => {
     if (error.response) {
       useLoaderStore.getState().setLoading(false);
       const status = error.response.status;
@@ -55,9 +57,14 @@ apiAuth.interceptors.response.use(
           toast.error(`Bad Request: ${message}`);
           break;
         case 401:
-          toast.error('Unauthorized! Please log in.');
-          useAuthStore.getState().logout();
-          window.location.href = '/login';
+          try {
+            await refreshTokens();
+            return apiAuth(error.config);
+          } catch {
+            toast.error('Session expired. Please log in again.');
+            useAuthStore.getState().logout();
+            window.location.href = '/login';
+          }
           break;
         case 403:
           toast.error("Forbidden! You don't have access.");
@@ -79,3 +86,13 @@ apiAuth.interceptors.response.use(
     return Promise.reject(error);
   },
 );
+const refreshTokens = async () => {
+  await api
+    .post('/auth/refresh', {}, { withCredentials: true })
+    .then(response => {
+      useAuthStore.getState().login(response.data.accessToken);
+    })
+    .catch(() => {
+      throw new Error('Failed to refresh token');
+    });
+};

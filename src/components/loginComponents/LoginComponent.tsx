@@ -17,8 +17,8 @@ const LoginComponent: FC = () => {
     const onSubmit = async (data: LoginForm) => {
         try {
             const response = await fetchAuth(data)
-            if (response.status === 201 && response.data.tokens.accessToken) {
-                login(response.data.tokens.accessToken);
+            if (response.status === 201 && response.data.accessToken) {
+                login(response.data.accessToken);
                 navigate("/orders");
         }
     } catch (error) {
