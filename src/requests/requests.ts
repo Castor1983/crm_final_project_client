@@ -8,6 +8,7 @@ import { LoginForm } from '../interfaces/loginForm.interface.ts';
 import { ManagerInterface } from '../interfaces/manager.interface.ts';
 import { StatsInterface } from '../interfaces/stats.interface.ts';
 import { api, apiAuth } from '../services/api.ts';
+import { useAuthStore } from '../store/auth.ts';
 
 const fetchGroups = async (setGroups: (groups: GroupInterface[]) => void) => {
   try {
@@ -26,6 +27,21 @@ const fetchOrdersExportToExcel = async (params: { [p: string]: string }) => {
 
 const fetchAuth = async (data: LoginForm) => {
   return await api.post(urls.auth.signIn, data);
+};
+
+const fetchRefresh = async () => {
+  try {
+    const response = await api.post(
+      urls.auth.refresh,
+      {},
+      { withCredentials: true },
+    );
+    const newAccessToken = response.data.accessToken;
+    useAuthStore.getState().login(newAccessToken);
+  } catch {
+    useAuthStore.getState().logout();
+    window.location.href = '/login';
+  }
 };
 
 const fetchManagers = async (
@@ -116,4 +132,5 @@ export {
   fetchAddComment,
   fetchAddGroup,
   fetchUpdateOrder,
+  fetchRefresh,
 };

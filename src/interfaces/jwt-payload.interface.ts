@@ -4,4 +4,5 @@ export interface IJwtPayload {
   managerId: string;
   surname: string;
   role: ManagerRole;
+  exp: number;
 }

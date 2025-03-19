@@ -57,14 +57,9 @@ apiAuth.interceptors.response.use(
           toast.error(`Bad Request: ${message}`);
           break;
         case 401:
-          try {
-            await refreshTokens();
-            return apiAuth(error.config);
-          } catch {
-            toast.error('Session expired. Please log in again.');
-            useAuthStore.getState().logout();
-            window.location.href = '/login';
-          }
+          toast.error('Session expired. Please log in again.');
+          useAuthStore.getState().logout();
+          window.location.href = '/login';
           break;
         case 403:
           toast.error("Forbidden! You don't have access.");
@@ -86,13 +81,3 @@ apiAuth.interceptors.response.use(
     return Promise.reject(error);
   },
 );
-const refreshTokens = async () => {
-  await api
-    .post('/auth/refresh', {}, { withCredentials: true })
-    .then(response => {
-      useAuthStore.getState().login(response.data.accessToken);
-    })
-    .catch(() => {
-      throw new Error('Failed to refresh token');
-    });
-};
