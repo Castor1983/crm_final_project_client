@@ -15,24 +15,15 @@ type Props = {
     setIsModalOpen: (open: boolean) => void
 }
 const OrdersTableComponent: FC<Props> =({setIsModalOpen}) => {
-    const [expandedOrders, setExpandedOrders] = useState<Set<number>>(new Set());
+    const [expandedOrder, setExpandedOrder] = useState<number | null>(null);
     const {sortConfig, setSortConfig} = useSortConfigStore();
     const { orders} = useOrdersStore();
     const [, setSearchParams] = useSearchParams();
     const {setCurrentPage} = usePaginationStore();
     const excludedColumns = ["msg", "utm"];
 
-    const handleExpandOrder = async (orderId: number) => {
-        setExpandedOrders((prev) => {
-            const newExpanded = new Set(prev);
-            if (newExpanded.has(orderId)) {
-                newExpanded.delete(orderId);
-            } else {
-                newExpanded.add(orderId);
-            }
-            return newExpanded;
-        });
-
+    const handleExpandOrder = (orderId: number) => {
+        setExpandedOrder(prevId => (prevId === orderId ? null : orderId));
     };
     const renderValue = (value: string | number | null, ) => {
         if (typeof value === "string" && value.includes("T")) {
@@ -96,7 +87,7 @@ const OrdersTableComponent: FC<Props> =({setIsModalOpen}) => {
                                 );
                             })}
                         </tr>
-                        {expandedOrders.has(order.id) && (
+                        {expandedOrder === order.id && (
                             <ExpandedOrderComponent order={order} setIsModalOpen={setIsModalOpen}/>
 
                         )}
