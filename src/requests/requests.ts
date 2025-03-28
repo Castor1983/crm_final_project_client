@@ -96,9 +96,10 @@ const fetchComments = async (orderId: number) => {
 };
 
 const fetchAddComment = async (orderId: number, comment: string) => {
-  await apiAuth.post(urls.orders.addComment(orderId), {
+  const newComment = await apiAuth.post(urls.orders.addComment(orderId), {
     body: comment,
   });
+  useCommentsStore.getState().setComment(newComment.data);
 };
 
 const fetchAddGroup = async (newGroup: string) => {

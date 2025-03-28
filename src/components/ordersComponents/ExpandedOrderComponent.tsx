@@ -16,7 +16,7 @@ const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
     const {manager} = useAuthStore()
     const [commentState, setCommentState] = useState('');
     const {setEditOrder}=useOrdersStore()
-    const {setComment, comments, comment} = useCommentsStore()
+    const {comments, comment} = useCommentsStore()
     const [error, setError] = useState("");
     const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false);
 
@@ -34,7 +34,6 @@ const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
         }
         try {
             await fetchAddComment(orderId, commentState)
-            setComment(commentState)
             setCommentState('');
             setError('');
         } catch (error) {
@@ -107,7 +106,7 @@ const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
                     </div>
                 )}
                 {isCommentsModalOpen && (
-                    <CommentsModalComponent comments={comments} onClose={() => setIsCommentsModalOpen(false)} />
+                    <CommentsModalComponent onClose={() => setIsCommentsModalOpen(false)} />
                 )}
             </td>
         </tr>
