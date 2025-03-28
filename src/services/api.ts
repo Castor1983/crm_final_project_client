@@ -2,6 +2,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 import { baseUrl } from '../common/urls.ts';
+import { fetchRefresh } from '../requests/requests.ts';
 import { useAuthStore } from '../store/auth.ts';
 import useLoaderStore from '../store/loader.ts';
 
@@ -51,15 +52,24 @@ apiAuth.interceptors.response.use(
       useLoaderStore.getState().setLoading(false);
       const status = error.response.status;
       const message = error.response.data?.message || 'Something went wrong';
+      const originalRequest = error.config;
+
+      if (error.response?.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true;
+
+        try {
+          await fetchRefresh();
+          originalRequest.headers.Authorization = `Bearer ${useAuthStore.getState().accessToken}`;
+          return apiAuth(originalRequest);
+        } catch (refreshError) {
+          console.error('Session expired. Redirecting to login...');
+          return Promise.reject(refreshError);
+        }
+      }
 
       switch (status) {
         case 400:
           toast.error(`Bad Request: ${message}`);
-          break;
-        case 401:
-          toast.error('Session expired. Please log in again.');
-          useAuthStore.getState().logout();
-          window.location.href = '/login';
           break;
         case 403:
           toast.error("Forbidden! You don't have access.");

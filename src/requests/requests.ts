@@ -40,7 +40,6 @@ const fetchRefresh = async () => {
     useAuthStore.getState().login(newAccessToken);
   } catch {
     useAuthStore.getState().logout();
-    window.location.href = '/login';
   }
 };
 
