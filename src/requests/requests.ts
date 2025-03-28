@@ -1,14 +1,13 @@
-import React from 'react';
 import { toast } from 'react-toastify';
 
 import { managersUrl, urls } from '../common/urls.ts';
-import { CommentInterface } from '../interfaces/comment.interface.ts';
 import { GroupInterface } from '../interfaces/group.interface.ts';
 import { LoginForm } from '../interfaces/loginForm.interface.ts';
 import { ManagerInterface } from '../interfaces/manager.interface.ts';
 import { StatsInterface } from '../interfaces/stats.interface.ts';
 import { api, apiAuth } from '../services/api.ts';
 import { useAuthStore } from '../store/auth.ts';
+import { useCommentsStore } from '../store/comments.ts';
 
 const fetchGroups = async (setGroups: (groups: GroupInterface[]) => void) => {
   try {
@@ -87,13 +86,10 @@ const fetchActivatePassword = async (
   });
 };
 
-const fetchComments = async (
-  orderId: number,
-  setComments: React.Dispatch<React.SetStateAction<CommentInterface[]>>,
-) => {
+const fetchComments = async (orderId: number) => {
   try {
     const commentsResponse = await apiAuth.get(urls.orders.orderById(orderId));
-    setComments(commentsResponse.data.comments);
+    useCommentsStore.getState().setComments(commentsResponse.data.comments);
   } catch (error) {
     console.error('Could not get comments', error);
   }

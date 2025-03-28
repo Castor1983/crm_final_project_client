@@ -2,7 +2,6 @@ import {FC, useEffect, useState} from "react";
 import {useAuthStore} from "../../store/auth.ts";
 import {Order} from "../../interfaces/order.interface.ts";
 import {useOrdersStore} from "../../store/orders.ts";
-import {CommentInterface} from "../../interfaces/comment.interface.ts";
 import CommentsModalComponent from "./CommentsModalComponent.tsx";
 import {fetchAddComment, fetchComments} from "../../requests/requests.ts";
 import {buttonClass} from "../../styles/styles.ts";
@@ -15,17 +14,16 @@ type Props = {
 
 const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
     const {manager} = useAuthStore()
-    const [commentsState,  setCommentsState] = useState<CommentInterface[]>([]);
     const [commentState, setCommentState] = useState('');
     const {setEditOrder}=useOrdersStore()
-    const {setComment} = useCommentsStore()
+    const {setComment, comments, comment} = useCommentsStore()
     const [error, setError] = useState("");
     const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false);
 
 
     useEffect(() => {
-        fetchComments(order.id, setCommentsState)
-    }, [commentState]);
+        fetchComments(order.id)
+    }, [comment]);
 
 
 
@@ -54,9 +52,9 @@ const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
                 <p><strong>Message:</strong> {order.msg || 'None'}</p>
                 <p><strong>UTM:</strong> {order.utm || 'None'}</p>
                 <div className="mt-4 p-2 border-t border-gray-300" onClick={() => setIsCommentsModalOpen(true)}>
-                    {commentsState && commentsState.length > 0 ? (
+                    {comments && comments.length > 0 ? (
                         <ul className="space-y-2">
-                            {[...commentsState]
+                            {[...comments]
                                 .sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime())
                                 .slice(0, 3).map((comment, index) => (
                                 <li key={index} className="p-2 bg-white rounded-md shadow-sm">
@@ -109,7 +107,7 @@ const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
                     </div>
                 )}
                 {isCommentsModalOpen && (
-                    <CommentsModalComponent comments={commentsState} onClose={() => setIsCommentsModalOpen(false)} />
+                    <CommentsModalComponent comments={comments} onClose={() => setIsCommentsModalOpen(false)} />
                 )}
             </td>
         </tr>
