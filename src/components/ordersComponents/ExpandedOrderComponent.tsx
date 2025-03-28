@@ -22,7 +22,7 @@ const ExpandedOrderComponent: FC <Props> = ({setIsModalOpen, order}) => {
 
 
     useEffect(() => {
-        fetchComments(order.id)
+        fetchComments(order.id).then()
     }, [comment]);
 
 

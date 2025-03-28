@@ -23,10 +23,10 @@ const OrdersComponent: FC = () => {
         setCurrentPage(pageFromUrl);
     }, []);
     useEffect(() => {
-        fetchOrders();
+        fetchOrders().then();
     }, [searchParams, sortConfig, isModalOpen]);
     useEffect(() => {
-        fetchGroups()
+        fetchGroups().then()
     }, []);
 
     const fetchOrders = async () => {
