@@ -9,6 +9,7 @@ import OrderUpdateComponent from "./OrderUpdateComponent.tsx";
 import OrdersTableComponent from "./OrdersTableComponent.tsx";
 import {apiAuth} from "../../services/api.ts";
 import {ordersUrl} from "../../common/urls.ts";
+import {fetchGroups} from "../../requests/requests.ts";
 
 const OrdersComponent: FC = () => {
     const {setOrders, editOrder} = useOrdersStore();
@@ -24,6 +25,9 @@ const OrdersComponent: FC = () => {
     useEffect(() => {
         fetchOrders();
     }, [searchParams, sortConfig, isModalOpen]);
+    useEffect(() => {
+        fetchGroups()
+    }, []);
 
     const fetchOrders = async () => {
         try {

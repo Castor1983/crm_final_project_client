@@ -7,16 +7,16 @@ import {Filters, getInitialFilters} from "../../interfaces/filters.interface.ts"
 import {RiResetRightFill} from "react-icons/ri";
 import {FaFileExcel} from "react-icons/fa";
 import {FC} from "react";
-import {GroupInterface} from "../../interfaces/group.interface.ts";
+import {useGroupsStore} from "../../store/groups.ts";
 
 type Props = {
   filters: Filters,
-  groups: GroupInterface[],
   updateFilters: (newFilters: Filters) => void,
   exportToExcel: () => void,
 }
 
-const FilterFormComponent: FC <Props> = ({groups, filters, updateFilters, exportToExcel}) => {
+const FilterFormComponent: FC <Props> = ({ filters, updateFilters, exportToExcel}) => {
+    const {groups} = useGroupsStore();
     return (
         <div className="grid grid-cols-7 grid-rows-2">
 

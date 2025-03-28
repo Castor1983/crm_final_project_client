@@ -1,18 +1,18 @@
 import { toast } from 'react-toastify';
 
 import { managersUrl, urls } from '../common/urls.ts';
-import { GroupInterface } from '../interfaces/group.interface.ts';
 import { LoginForm } from '../interfaces/loginForm.interface.ts';
 import { ManagerInterface } from '../interfaces/manager.interface.ts';
 import { StatsInterface } from '../interfaces/stats.interface.ts';
 import { api, apiAuth } from '../services/api.ts';
 import { useAuthStore } from '../store/auth.ts';
 import { useCommentsStore } from '../store/comments.ts';
+import { useGroupsStore } from '../store/groups.ts';
 
-const fetchGroups = async (setGroups: (groups: GroupInterface[]) => void) => {
+const fetchGroups = async () => {
   try {
     const groupsResponse = await apiAuth.get(urls.orders.groups);
-    setGroups(groupsResponse.data);
+    useGroupsStore.getState().setGroups(groupsResponse.data);
   } catch (error) {
     console.error('Error when removing a group:', error);
   }

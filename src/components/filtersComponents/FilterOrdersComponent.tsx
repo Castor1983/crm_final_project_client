@@ -1,26 +1,19 @@
-import {FC, useCallback, useEffect, useMemo, useState} from "react";
+import {FC, useCallback, useMemo, useState} from "react";
 import * as ExcelJS from 'exceljs';
 import { saveAs } from "file-saver";
 import { debounce } from "lodash";
 import {useSearchParams} from "react-router-dom";
 
-import {useGroupsStore} from "../../store/groups.ts";
 import {COLUMNS_NAME} from "../../common/constants.ts";
 import {Order} from "../../interfaces/order.interface.ts";
 import {Filters, getInitialFilters} from "../../interfaces/filters.interface.ts";
 import FilterFormComponent from "./FilterFormComponent.tsx";
-import {fetchGroups, fetchOrdersExportToExcel} from "../../requests/requests.ts";
+import { fetchOrdersExportToExcel} from "../../requests/requests.ts";
 
 
 const FilterOrdersComponent: FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
-    const {groups, setGroups} = useGroupsStore();
     const [filters, setFilters] = useState<Filters>(getInitialFilters(searchParams));
-
-    useEffect(() => {
-        fetchGroups(setGroups)
-    }, []);
-
 
     const debouncedUpdateFilters = useMemo(
         () =>
@@ -72,7 +65,7 @@ const exportToExcel =  async () => {
     }
 
     return (
-        <FilterFormComponent groups={groups} filters={filters} updateFilters={updateFilters} exportToExcel={exportToExcel} />
+        <FilterFormComponent filters={filters} updateFilters={updateFilters} exportToExcel={exportToExcel} />
     )
 };
 
