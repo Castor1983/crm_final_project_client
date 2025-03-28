@@ -22,7 +22,7 @@ const OrderUpdateComponent: FC <Props> = ({isModalOpen, setIsModalOpen}) => {
     const [initialOrder, setInitialOrder] = useState<Order | null>(null);
 
     useEffect(() => {
-            fetchGroups(setGroups);
+            fetchGroups();
     }, [isAddingGroup]);
 
     useEffect(() => {
